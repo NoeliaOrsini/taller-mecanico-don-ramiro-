@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Taller Mecánico Don Ramiro</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="text-slate-900 min-h-screen pb-16">
+
+  <!-- Header con Logo de Personaje Arcade -->
+  <header class="bg-blue-600 border-b-4 border-black p-3 sm:p-4 text-white sticky top-0 z-30 shadow-md">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+      
+      <!-- Character Logo & Title -->
+      <div class="flex items-center space-x-3 w-full sm:w-auto">
+        <!-- SVG Custom Character Logo -->
+        <div class="bg-amber-400 p-2 rounded-2xl border-3 border-black shadow-[3px_3px_0px_#000] shrink-0">
+          <svg width="56" height="56" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 md:w-16 md:h-16">
+            <!-- Fondo circular estilizado -->
+            <rect x="5" y="5" width="90" height="90" rx="45" fill="#2563EB" stroke="#000" stroke-width="4"/>
+            <circle cx="50" cy="50" r="40" fill="#3B82F6" stroke="#000" stroke-width="3"/>
+            
+            <!-- Personaje: Cabeza -->
+            <path d="M30 46C30 34 70 34 70 46C70 66 62 74 50 74C38 74 30 66 30 46Z" fill="#FFE0B2" stroke="#000" stroke-width="3.5"/>
+            
+            <!-- Gorra Mecánica Roja -->
+            <path d="M22 42C22 22 34 14 50 14C66 14 78 22 78 42H22Z" fill="#DC2626" stroke="#000" stroke-width="3.5"/>
+            <path d="M14 42C24 39 76 39 86 42L80 48H20L14 42Z" fill="#991B1B" stroke="#000" stroke-width="3.5"/>
+            <!-- Emblema de la Gorra -->
+            <circle cx="50" cy="26" r="5" fill="#FACC15" stroke="#000" stroke-width="2"/>
+
+            <!-- Ojos Expresivos -->
+            <circle cx="41" cy="50" r="3.5" fill="#000"/>
+            <circle cx="59" cy="50" r="3.5" fill="#000"/>
+            
+            <!-- Bigote Don Ramiro -->
+            <path d="M30 60C36 56 45 61 50 59C55 61 64 56 70 60C72 65 62 69 50 65C38 69 28 65 30 60Z" fill="#1E1003" stroke="#000" stroke-width="2.5"/>
+
+            <!-- Llave Inglesa Cruzada Abajo -->
+            <g transform="translate(72, 62) rotate(15)">
+              <rect x="-4" y="-18" width="8" height="28" rx="2" fill="#CBD5E1" stroke="#000" stroke-width="3"/>
+              <path d="M -10,-18 C -10,-28 10,-28 10,-18 C 10,-12 4,-10 0,-10 C -4,-10 -10,-12 -10,-18 Z" fill="#94A3B8" stroke="#000" stroke-width="3"/>
+              <rect x="-3" y="-25" width="6" height="8" fill="#475569" stroke="#000" stroke-width="2"/>
+            </g>
+          </svg>
+        </div>
+
+        <div>
+          <h1 class="text-xl md:text-2xl font-black tracking-tight text-white uppercase drop-shadow-[2px_2px_0px_#000]">
+            DON RAMIRO
+          </h1>
+          <span class="inline-block bg-amber-400 text-slate-900 border-2 border-black text-[10px] md:text-[11px] font-black px-2 py-0.5 rounded-md uppercase tracking-wider">
+            Taller Mecánico
+          </span>
+        </div>
+      </div>
+
+      <!-- Botón Gigante de Ingresar Vehículo -->
+      <button onclick="openIngresarModal()" class="w-full sm:w-auto arcade-btn bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-900 font-black py-3.5 px-6 rounded-2xl text-base flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-plus text-xl"></i>
+        <span>INGRESAR VEHÍCULO</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-5xl mx-auto px-3 sm:px-4 mt-4 sm:mt-6">
+
+    <!-- Counter / Filter Tabs (Filtros Táctiles) -->
+    <section class="grid grid-cols-2 md:grid-cols-5 gap-2.5 sm:gap-3 mb-6">
+      <button onclick="setFilter('TODOS')" id="filter-TODOS" class="filter-btn arcade-btn bg-white rounded-2xl p-2.5 sm:p-3 text-center">
+        <span class="block text-2xl sm:text-3xl font-black text-slate-900" id="count-todos">0</span>
+        <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-700">ACTIVOS</span>
+      </button>
+      
+      <button onclick="setFilter('ROJO')" id="filter-ROJO" class="filter-btn arcade-btn bg-white rounded-2xl p-2.5 sm:p-3 text-center">
+        <span class="block text-2xl sm:text-3xl font-black text-red-600" id="count-rojo">0</span>
+        <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-red-700">REPARANDO</span>
+      </button>
+
+      <button onclick="setFilter('AMARILLO')" id="filter-AMARILLO" class="filter-btn arcade-btn bg-white rounded-2xl p-2.5 sm:p-3 text-center">
+        <span class="block text-2xl sm:text-3xl font-black text-amber-500" id="count-amarillo">0</span>
+        <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-800">COTIZANDO</span>
+      </button>
+
+      <button onclick="setFilter('VERDE')" id="filter-VERDE" class="filter-btn arcade-btn bg-white rounded-2xl p-2.5 sm:p-3 text-center">
+        <span class="block text-2xl sm:text-3xl font-black text-emerald-600" id="count-verde">0</span>
+        <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-emerald-800">LISTOS</span>
+      </button>
+
+      <button onclick="setFilter('ARCHIVADO')" id="filter-ARCHIVADO" class="col-span-2 md:col-span-1 filter-btn arcade-btn bg-slate-200 rounded-2xl p-2.5 sm:p-3 text-center">
+        <span class="block text-2xl sm:text-3xl font-black text-slate-600" id="count-archivado">0</span>
+        <span class="text-[10px] sm:text-xs font-black uppercase tracking-wider text-slate-700">HISTORIAL</span>
+      </button>
+    </section>
+
+    <!-- Lista de Vehículos -->
+    <div id="vehiculos-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Tarjetas cargadas dinámicamente -->
+    </div>
+
+    <!-- Empty State -->
+    <div id="empty-state" class="hidden text-center py-12 bg-white rounded-2xl arcade-card p-6">
+      <i class="fa-solid fa-car-side text-6xl text-slate-300 mb-3"></i>
+      <h3 class="text-xl font-black text-slate-800 uppercase">Sin vehículos en este estado</h3>
+      <p class="text-sm font-bold text-slate-500 mt-1">Presiona "INGRESAR VEHÍCULO" para registrar uno nuevo.</p>
+    </div>
+
+  </main>
+
+  <!-- Modal: Ingresar Vehículo -->
+  <div id="modal-ingresar" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 arcade-card">
+      <div class="flex justify-between items-center mb-4 border-b-3 border-black pb-3">
+        <h3 class="text-xl font-black text-slate-900 uppercase flex items-center gap-2">
+          <i class="fa-solid fa-car text-blue-600"></i>
+          Ingresar Nuevo Vehículo
+        </h3>
+        <button onclick="closeIngresarModal()" class="bg-slate-200 border-2 border-black rounded-xl w-10 h-10 font-black text-lg">✕</button>
+      </div>
+      <form id="form-ingresar" onsubmit="handleIngresarVehiculo(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-black uppercase text-slate-700 mb-1">Nombre del Cliente *</label>
+          <input type="text" id="input-cliente" required placeholder="Ej: Pepito Pérez" class="w-full p-4 bg-slate-50 border-3 border-black rounded-xl font-bold text-slate-900 text-base focus:outline-none focus:bg-amber-50">
+        </div>
+        <div>
+          <label class="block text-xs font-black uppercase text-slate-700 mb-1">Teléfono (WhatsApp con código de país, sin + ni espacios) *</label>
+          <input type="tel" id="input-telefono" required placeholder="Ej: 5491112345678" class="w-full p-4 bg-slate-50 border-3 border-black rounded-xl font-bold text-slate-900 text-base focus:outline-none focus:bg-amber-50">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-black uppercase text-slate-700 mb-1">Modelo / Vehículo *</label>
+            <input type="text" id="input-vehiculo" required placeholder="Ej: Fiat 500" class="w-full p-4 bg-slate-50 border-3 border-black rounded-xl font-bold text-slate-900 text-base focus:outline-none focus:bg-amber-50">
+          </div>
+          <div>
+            <label class="block text-xs font-black uppercase text-slate-700 mb-1">Patente *</label>
+            <input type="text" id="input-patente" required placeholder="Ej: AA123CD" class="w-full p-4 bg-slate-50 border-3 border-black rounded-xl font-bold text-slate-900 text-base uppercase focus:outline-none focus:bg-amber-50">
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs font-black uppercase text-slate-700 mb-1">Motivo / Fallas Iniciales *</label>
+          <textarea id="input-motivo" required rows="2" placeholder="Ej: Pérdida de aceite y ruido al frenar" class="w-full p-4 bg-slate-50 border-3 border-black rounded-xl font-bold text-slate-900 text-base focus:outline-none focus:bg-amber-50"></textarea>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closeIngresarModal()" class="w-1/2 arcade-btn bg-slate-200 text-slate-800 font-black py-4 rounded-xl text-base">CANCELAR</button>
+          <button type="submit" class="w-1/2 arcade-btn bg-blue-600 text-white font-black py-4 rounded-xl text-base">GUARDAR</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Agregar Trabajo Extra -->
+  <div id="modal-extra" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 arcade-card">
+      <div class="flex justify-between items-center mb-4 border-b-3 border-black pb-3">
+        <h3 class="text-xl font-black text-amber-600 uppercase flex items-center gap-2">
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Trabajo Adicional
+        </h3>
+        <button onclick="closeExtraModal()" class="bg-slate-200 border-2 border-black rounded-xl w-10 h-10 font-black text-lg">✕</button>
+      </div>
+      <form id="form-extra" onsubmit="handleGuardarExtra(event)" class="space-y-4">
+        <input type="hidden" id="input-extra-vehiculo-id">
+        <div>
+          <label class="block text-xs font-black uppercase text-slate-700 mb-1">Detalle del arreglo adicional *</label>
+          <textarea id="input-extra-detalle" required rows="2" placeholder="Ej: Cambio urgente de pastillas de freno gastadas" class="w-full p-4 bg-slate-50 border-3 border-black rounded-xl font-bold text-slate-900 text-base focus:outline-none focus:bg-amber-50"></textarea>
+        </div>
+        <div>
+          <label class="block text-xs font-black uppercase text-slate-700 mb-1">Costo Adicional ($) *</label>
+          <input type="number" id="input-extra-costo" required placeholder="Ej: 45000" class="w-full p-4 bg-slate-50 border-3 border-black rounded-xl font-black text-slate-900 text-xl focus:outline-none focus:bg-amber-50">
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="button" onclick="closeExtraModal()" class="w-1/2 arcade-btn bg-slate-200 text-slate-800 font-black py-4 rounded-xl text-base">CANCELAR</button>
+          <button type="submit" class="w-1/2 arcade-btn bg-amber-400 text-slate-900 font-black py-4 rounded-xl text-base">REGISTRAR</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notificación Arcade -->
+  <div id="toast" class="fixed bottom-5 right-5 left-5 md:left-auto bg-slate-900 text-white border-3 border-black p-4 rounded-2xl shadow-[5px_5px_0px_#000] flex items-center space-x-3 hidden z-50">
+    <i class="fa-solid fa-circle-check text-emerald-400 text-2xl"></i>
+    <span id="toast-message" class="text-sm font-black uppercase tracking-wide">Notificación</span>
+  </div>
+
+  <!-- App Script -->
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+/* ============================================
+   Taller Mecánico Don Ramiro - Styles
+   Estilo Arcade / Neobrutalism
+   ============================================ */
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f4f6;
+}
+
+/* Custom Arcade/Neobrutalism Shadows & Tactile feel */
+.arcade-card {
+  border: 3px solid #000;
+  box-shadow: 5px 5px 0px #000;
+}
+
+.arcade-btn {
+  border: 3px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  transition: transform 0.05s ease, box-shadow 0.05s ease;
+  touch-action: manipulation;
+}
+
+.arcade-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+.arcade-btn-sm {
+  border: 2px solid #000;
+  box-shadow: 3px 3px 0px #000;
+  touch-action: manipulation;
+  min-height: 48px; /* Tareas táctiles cómodas en celular */
+}
+
+.arcade-btn-sm:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #000;
+}
+
+/* Custom high contrast semáforo active states */
+.btn-rojo-active {
+  background-color: #ff2a2a !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+  box-shadow: inset 0px 0px 0px 3px #000000, 3px 3px 0px #000 !important;
+}
+
+.btn-amarillo-active {
+  background-color: #ffcc00 !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  box-shadow: inset 0px 0px 0px 3px #000000, 3px 3px 0px #000 !important;
+}
+
+.btn-verde-active {
+  background-color: #00d053 !important;
+  color: #ffffff !important;
+  border-color: #000000 !important;
+  box-shadow: inset 0px 0px 0px 3px #000000, 3px 3px 0px #000 !important;
+}
