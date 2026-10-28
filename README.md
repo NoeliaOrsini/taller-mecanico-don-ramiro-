@@ -40,6 +40,22 @@ En la operativa diaria de un taller mecánico aparecen tres fricciones principal
 | **WhatsApp directo (wa.me)** | Botones de un toque que abren WhatsApp con mensajes preescritos para pedir aprobación o avisar que el auto está listo. |
 | **Diseño táctil neobrutalista / arcade** | Botones grandes (mín. 48 px), tipografía bold y alto contraste para toques precisos desde el celular. |
 | **Historial y archivado** | Los vehículos entregados se archivan (no se eliminan) para consultar garantías sin saturar el panel diario. |
+| **Exportar / Importar** | Backup en archivo JSON para compartir entre dispositivos o guardar historial fuera de la app. |
+
+---
+
+## 🔒 Privacidad y almacenamiento (versión beta)
+
+Esta es una **versión beta de uso interno** pensada como ejercicio de curso y herramienta de taller.
+
+- Los datos se guardan **únicamente en el navegador del dispositivo** (`localStorage`).
+- **No se envían a ningún servidor** ni a servicios en la nube.
+- No se requiere cuenta, login ni conexión a internet para funcionar (salvo WhatsApp).
+- Cada dispositivo mantiene su propia copia de los datos.
+- Para compartir información entre celulares o hacer respaldo se usa **Exportar / Importar** (archivo JSON).
+
+> Al ser de uso interno y no recolectar ni transmitir datos personales a terceros, no se implementó una política de privacidad formal en esta versión beta.  
+> Si en el futuro se agregara un backend o almacenamiento en la nube, correspondería incorporar avisos y políticas adecuadas.
 
 ---
 
@@ -98,7 +114,9 @@ taller-mecanico-don-ramiro-/
 4. Agregá un trabajo adicional con **+ EXTRA** → el auto pasa automáticamente a amarillo.
 5. Confirmá la aprobación del cliente (se genera la marca de tiempo).
 6. Presioná **WHATSAPP** para abrir la conversación con el mensaje preescrito.
-7. Al finalizar, usá **ARCHIVAR EN HISTORIAL** para mover el vehículo al historial.
+7. Al finalizar, usá **ARCHIVAR EN HISTORIAL**.
+8. Desde el **Historial** podés **REACTIVAR** o **ELIMINAR** definitivamente un vehículo.
+9. Usá **EXPORTAR** para descargar un backup JSON y **IMPORTAR** para cargarlo en otro dispositivo.
 
 ---
 
@@ -119,9 +137,21 @@ Luego abrí: [http://localhost:8000](http://localhost:8000)
 
 ---
 
+## 🔮 Posibles mejoras a futuro
+
+- Autenticación simple por PIN o usuario para varios empleados
+- Backend liviano (Supabase / SQLite) si se necesita sincronización entre dispositivos
+- Generación de comprobante/PDF de trabajos y aprobaciones
+- Filtro por fecha y búsqueda por patente o cliente
+- Modo offline más robusto (PWA + service worker)
+- Integración más avanzada con WhatsApp Business API
+- Roles (mecánico / administración) con permisos distintos
+
+---
+
 ## 📌 Nota
 
-Los datos se guardan únicamente en el navegador (`localStorage`). Si se limpia la caché del navegador se pierden. Ideal para usar en una **tablet o celular del taller**.
+Los datos se guardan únicamente en el navegador (`localStorage`). Si se limpia la caché se pierden, por eso se recomienda usar **EXPORTAR** periódicamente. Ideal para usar en una **tablet o celular del taller**.
 
 ---
 

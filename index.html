@@ -67,11 +67,24 @@
         </div>
       </div>
 
-      <!-- Botón Gigante de Ingresar Vehículo -->
-      <button onclick="openIngresarModal()" class="w-full sm:w-auto arcade-btn bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-900 font-black py-3.5 px-6 rounded-2xl text-base flex items-center justify-center space-x-2">
-        <i class="fa-solid fa-plus text-xl"></i>
-        <span>INGRESAR VEHÍCULO</span>
-      </button>
+      <!-- Acciones principales -->
+      <div class="w-full sm:w-auto flex flex-col sm:flex-row gap-2">
+        <button onclick="openIngresarModal()" class="w-full sm:w-auto arcade-btn bg-amber-400 hover:bg-amber-300 active:bg-amber-500 text-slate-900 font-black py-3.5 px-6 rounded-2xl text-base flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-plus text-xl"></i>
+          <span>INGRESAR VEHÍCULO</span>
+        </button>
+        <div class="flex gap-2">
+          <button onclick="exportarBackup()" class="flex-1 sm:flex-none arcade-btn bg-white hover:bg-slate-100 text-slate-900 font-black py-3 px-4 rounded-2xl text-sm flex items-center justify-center gap-2">
+            <i class="fa-solid fa-download"></i>
+            <span>EXPORTAR</span>
+          </button>
+          <label class="flex-1 sm:flex-none arcade-btn bg-white hover:bg-slate-100 text-slate-900 font-black py-3 px-4 rounded-2xl text-sm flex items-center justify-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-upload"></i>
+            <span>IMPORTAR</span>
+            <input type="file" accept=".json,application/json" class="hidden" onchange="importarBackup(event)">
+          </label>
+        </div>
+      </div>
     </div>
   </header>
 

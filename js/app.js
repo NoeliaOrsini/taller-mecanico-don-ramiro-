@@ -166,6 +166,77 @@ function reactivarVehiculo(id) {
   showToast(`${v.vehiculo} reactivado en el taller.`);
 }
 
+function eliminarVehiculo(id) {
+  const v = vehiculos.find(item => item.id === id);
+  if (!v) return;
+
+  const confirmar = confirm(`¿Eliminar definitivamente el vehículo ${v.vehiculo} (${v.patente})?\n\nEsta acción no se puede deshacer. Asegurate de haber exportado el backup si necesitás conservar el historial.`);
+  if (!confirmar) return;
+
+  vehiculos = vehiculos.filter(item => item.id !== id);
+  saveToLocalStorage();
+  render();
+  showToast(`${v.vehiculo} eliminado definitivamente.`);
+}
+
+function exportarBackup() {
+  const data = {
+    exportadoEn: new Date().toISOString(),
+    version: '1.0',
+    total: vehiculos.length,
+    vehiculos: vehiculos
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const fecha = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `don-ramiro-backup-${fecha}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Backup exportado correctamente');
+}
+
+function importarBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      let lista = [];
+
+      if (Array.isArray(data)) {
+        lista = data;
+      } else if (data.vehiculos && Array.isArray(data.vehiculos)) {
+        lista = data.vehiculos;
+      } else {
+        throw new Error('Formato no válido');
+      }
+
+      const confirmar = confirm(`Se van a importar ${lista.length} vehículo(s).\n\nEsto reemplazará los datos actuales de la app.\n¿Continuar?`);
+      if (!confirmar) {
+        event.target.value = '';
+        return;
+      }
+
+      vehiculos = lista;
+      saveToLocalStorage();
+      render();
+      showToast(`Importados ${lista.length} vehículos`);
+    } catch (err) {
+      showToast('Error: archivo no válido');
+      console.error(err);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
 function enviarWhatsAppAviso(id) {
   const v = vehiculos.find(item => item.id === id);
   if (!v) return;
@@ -334,10 +405,14 @@ function render() {
             </div>
           ` : `
             <!-- Estado Archivados -->
-            <div class="pt-2 border-t-2 border-slate-200">
-              <button onclick="reactivarVehiculo('${v.id}')" class="w-full arcade-btn-sm bg-blue-600 hover:bg-blue-500 text-white font-black py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1">
+            <div class="pt-2 border-t-2 border-slate-200 grid grid-cols-2 gap-2">
+              <button onclick="reactivarVehiculo('${v.id}')" class="arcade-btn-sm bg-blue-600 hover:bg-blue-500 text-white font-black py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1">
                 <i class="fa-solid fa-rotate-left"></i>
-                <span>REACTIVAR EN TALLER</span>
+                <span>REACTIVAR</span>
+              </button>
+              <button onclick="eliminarVehiculo('${v.id}')" class="arcade-btn-sm bg-red-500 hover:bg-red-400 text-white font-black py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1">
+                <i class="fa-solid fa-trash"></i>
+                <span>ELIMINAR</span>
               </button>
             </div>
           `}
