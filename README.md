@@ -141,6 +141,7 @@ Luego abrí: [http://localhost:8000](http://localhost:8000)
 
 - Autenticación simple por PIN o usuario para varios empleados
 - Backend liviano (Supabase / SQLite) si se necesita sincronización entre dispositivos
+- **Backup automático a Google Drive** (u otro almacenamiento de la cuenta del usuario), para que los datos no se pierdan si se borran las cookies/caché del navegador o si se olvida exportar manualmente
 - Generación de comprobante/PDF de trabajos y aprobaciones
 - Filtro por fecha y búsqueda por patente o cliente
 - Modo offline más robusto (PWA + service worker)
