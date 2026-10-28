@@ -8,6 +8,12 @@ Una aplicación web **mobile-first** con estilo retro/arcade diseñada para la g
 
 ---
 
+### 🔗 Probar online
+
+**Demo:** [https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/](https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/)
+
+---
+
 ## 🎯 Problema que resuelve
 
 En la operativa diaria de un taller mecánico aparecen tres fricciones principales que afectan la productividad y la relación con los clientes:
@@ -84,19 +90,19 @@ taller-mecanico-don-ramiro-/
 
 ## 📱 Cómo probar la aplicación
 
-1. Abrí el archivo `index.html` en cualquier navegador o accedé por **GitHub Pages**.
+1. Entrá a la [demo online](https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/) o abrí el archivo `index.html`.
 2. Presioná **INGRESAR VEHÍCULO** y completá el formulario.  
    > 💡 Para probar WhatsApp con tu celular, ingresá tu número en formato internacional limpio (sin espacios ni ceros).  
    > Ejemplo Argentina: `5491112345678`
 3. Cambiá el estado del auto con los botones del semáforo (🔴 🟡 🟢).
 4. Agregá un trabajo adicional con **+ EXTRA** → el auto pasa automáticamente a amarillo.
-5. Simulá la aprobación del cliente con **SIMULAR APROBACIÓN DEL CLIENTE** para generar la marca de tiempo.
+5. Confirmá la aprobación del cliente (se genera la marca de tiempo).
 6. Presioná **WHATSAPP** para abrir la conversación con el mensaje preescrito.
-7. Al finalizar, usá **ARCHIVAR EN HISTORIAL** para mover el vehículo a la solapa de historial.
+7. Al finalizar, usá **ARCHIVAR EN HISTORIAL** para mover el vehículo al historial.
 
 ---
 
-## 🚀 Cómo usarlo
+## 🚀 Cómo usarlo localmente
 
 ### Opción 1 – Abrir directamente
 Descargá o cloná el repositorio y abrí `index.html` en el navegador.
@@ -111,21 +117,18 @@ npx serve .
 ```
 Luego abrí: [http://localhost:8000](http://localhost:8000)
 
-### Opción 3 – GitHub Pages
-1. Andá a **Settings → Pages**
-2. Source: Deploy from a branch → `main` → `/ (root)`
-3. Guardá. En unos minutos estará disponible en:  
-   `https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/`
-
 ---
 
-## 📌 Notas
+## 📌 Nota
 
-- Los datos se guardan únicamente en el navegador (`localStorage`). Si se limpia la caché se pierden.
-- El botón “Simular Aprobación del Cliente” es para pruebas. En un entorno real se puede reemplazar por un flujo de confirmación vía WhatsApp o un backend.
-- Ideal para usar en una **tablet o celular del taller**.
+Los datos se guardan únicamente en el navegador (`localStorage`). Si se limpia la caché del navegador se pierden. Ideal para usar en una **tablet o celular del taller**.
 
 ---
 
 **Hecho con ❤️ para el taller de Don Ramiro**  
 Diseñado con Gemini Canvas · Refactorizado con Grok
+
+---
+
+**Autora:** Noelia Orsini  
+Desarrolladora · Abogada · Counselor
