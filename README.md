@@ -16,7 +16,21 @@ La idea fue no depender de un solo prompt, sino dejar por escrito los requerimie
 
 ### 🔗 Probar online
 
-**Demo:** [https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/](https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/)
+**Demo principal (Don Ramiro):** [https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/](https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/)
+
+---
+
+### Prueba con otra herramienta (Lovable)
+
+El mismo prompt inicial y, después, las **mismas especificaciones** (`AGENT_CONTEXT.md`, `SPEC_PRESUPUESTOS.md`, `BRAND_SKILL.md`) se probaron desde cero en **Lovable**, sin reutilizar el código de este repositorio.
+
+Se obtuvo un resultado alineado con la spec: semáforo de estados, trabajos extra, aprobación con marca de tiempo y exportación/importación.
+
+En esa variante el nombre quedó como **Don Mario** (limitación de edición en el plan usado). Es el **mismo caso de uso** y la misma especificación; solo cambia el nombre de fantasía hasta poder ajustarlo.
+
+**Demo Lovable:** [https://taller-mecanico-don-mario.lovable.app](https://taller-mecanico-don-mario.lovable.app)
+
+> En el preview/deploy de Lovable la apertura de WhatsApp puede estar bloqueada por el entorno. En la demo de GitHub Pages o abriendo la app en el celular, el enlace funciona con normalidad.
 
 ---
 
