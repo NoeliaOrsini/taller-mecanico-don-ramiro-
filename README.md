@@ -4,7 +4,13 @@
 
 Una aplicación web **mobile-first** con estilo retro/arcade diseñada para la gestión operativa en tiempo real de talleres mecánicos. Optimizada para entornos de trabajo exigentes: facilita el control visual del estado de los vehículos y automatiza las comunicaciones con los clientes vía WhatsApp.
 
-> Diseñada originalmente con **Gemini Canvas** y refactorizada con **Grok**.
+Este proyecto no partió de un prompt genérico.  
+Se desarrolló a partir de un **prompt personal**, armado en función de un problema concreto del taller, centrado siempre en las necesidades del cliente, sus prioridades y sus gustos.
+
+Se trabajó con **mega prompting** y, más adelante, con una aproximación de **Spec Driven Development**: contexto del proyecto, especificación del feature principal y guía de marca (`AGENT_CONTEXT.md`, `SPEC_PRESUPUESTOS.md`, `BRAND_SKILL.md`).  
+La idea fue no depender de un solo prompt, sino dejar por escrito los requerimientos reales para obtener un resultado más preciso, coherente y alineado con el uso diario del taller.
+
+> Diseño inicial con **Gemini Canvas** · Refactor y especificación con **Grok** · Deploy en **GitHub Pages**.
 
 ---
 
@@ -184,4 +190,6 @@ Diseñado con Gemini Canvas · Refactorizado con Grok
 ---
 
 **Autora:** Noelia Orsini  
-Desarrolladora · Abogada · Counselor
+Desarrolladora · Abogada · Counselor  
+
+[LinkedIn](https://linkedin.com/in/noelia-orsini) · [Portafolio](https://noelia-orsini-portafolio.lovable.app/)
