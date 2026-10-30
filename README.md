@@ -44,6 +44,22 @@ En la operativa diaria de un taller mecánico aparecen tres fricciones principal
 
 ---
 
+## 📱 Cómo se ve la app
+
+### Pantalla principal
+![Pantalla principal - Don Ramiro](assets/don_ramiro.png)
+
+### Ingresar un vehículo nuevo
+![Modal ingresar vehículo](assets/ingresar.png)
+
+### Registrar un trabajo adicional
+![Modal trabajo adicional](assets/trabajo_adicional.png)
+
+### Aviso por WhatsApp (mensaje predeterminado)
+![WhatsApp listo para retirar](assets/whatsapp.png)
+
+---
+
 ## 🔒 Privacidad y almacenamiento (versión beta)
 
 Esta es una **versión beta de uso interno** pensada como ejercicio de curso y herramienta de taller.
@@ -85,19 +101,25 @@ Esta es una **versión beta de uso interno** pensada como ejercicio de curso y h
 | **Google Fonts (Inter)** | Tipografía |
 | **wa.me** | Enlaces directos a WhatsApp |
 
-> Arquitectura simple de **3 archivos** (HTML + CSS + JS) para máxima velocidad de carga y fácil mantenimiento.
-
 ---
 
 ## 📁 Estructura del proyecto
 
 ```
 taller-mecanico-don-ramiro-/
-├── index.html          # Página principal
+├── index.html              # Página principal
 ├── css/
-│   └── styles.css      # Estilos arcade / neobrutalism
+│   └── styles.css          # Estilos arcade / neobrutalism
 ├── js/
-│   └── app.js          # Lógica de la aplicación
+│   └── app.js              # Lógica de la aplicación
+├── assets/
+│   ├── don_ramiro.png      # Captura pantalla principal
+│   ├── ingresar.png        # Captura modal ingreso
+│   ├── trabajo_adicional.png
+│   └── whatsapp.png
+├── AGENT_CONTEXT.md        # Contexto para el agente (Spec Driven Development)
+├── SPEC_PRESUPUESTOS.md    # Especificación del feature principal
+├── BRAND_SKILL.md          # Guía de marca y diseño
 ├── README.md
 └── .gitignore
 ```
@@ -112,7 +134,7 @@ taller-mecanico-don-ramiro-/
    > Ejemplo Argentina: `5491112345678`
 3. Cambiá el estado del auto con los botones del semáforo (🔴 🟡 🟢).
 4. Agregá un trabajo adicional con **+ EXTRA** → el auto pasa automáticamente a amarillo.
-5. Confirmá la aprobación del cliente (se genera la marca de tiempo).
+5. Confirmá la aprobación del cliente (se genera la marca de tiempo) y luego pasalo a ROJO con el botón del semáforo.
 6. Presioná **WHATSAPP** para abrir la conversación con el mensaje preescrito.
 7. Al finalizar, usá **ARCHIVAR EN HISTORIAL**.
 8. Desde el **Historial** podés **REACTIVAR** o **ELIMINAR** definitivamente un vehículo.
