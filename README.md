@@ -62,7 +62,7 @@ Además de los problemas originales (llamadas, presupuestos extra, interfaz poco
 | **Aprobación con marca de tiempo** | Trabajos extra con detalle, costo y registro inalterable de aprobación. |
 | **WhatsApp directo** | Un clic abre el chat con mensaje prearmado. |
 | **Historial** | Archivar, reactivar o eliminar. El filtro por mecánico también aplica en historial. |
-| **Exportar / Importar** | Backup JSON (incluye mecánico asignado). |
+| **Exportar / Importar** | Al exportar se elige: **backup completo** o **solo la vista actual** (filtros activos). Importar reemplaza los datos de la app. |
 
 ### Cómo se usan los filtros (en la práctica)
 
@@ -156,7 +156,7 @@ taller-mecanico-don-ramiro-/
 │   ├── ingresar.png
 │   ├── trabajo_adicional.png
 │   ├── whatsapp.png
-│   └── panel_mecanicos_filtro.png  # Asignación + filtros (feature nuevo)
+│   └── panel_mecanicos_filtro.png
 ├── AGENT_CONTEXT.md
 ├── SPEC_PRESUPUESTOS.md
 ├── SPEC_ASIGNACION_MECANICO.md
@@ -177,7 +177,9 @@ taller-mecanico-don-ramiro-/
 4. Filtrar por estado (semáforo) y por mecánico; comprobar la leyenda de filtro.
 5. Cambiar mecánico desde la tarjeta.
 6. **+ EXTRA**, aprobación con marca de tiempo, **WHATSAPP**.
-7. **ARCHIVAR** / Historial / eliminar; exportar e importar JSON.
+7. **ARCHIVAR** / Historial / eliminar.
+8. **EXPORTAR**: elegir backup completo o solo la vista actual (filtros).
+9. **IMPORTAR**: reemplaza los datos actuales por el archivo JSON.
 
 Detalle: `TEST_CHECKLIST_ASIGNACION.md`.
 
