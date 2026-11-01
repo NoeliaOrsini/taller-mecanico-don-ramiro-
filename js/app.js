@@ -144,7 +144,6 @@ function handleIngresarVehiculo(e) {
     mecanicoAsignado: mecanico,
     trabajoExtra: null
   };
-
   vehiculos.unshift(nuevo);
   saveToLocalStorage();
   closeIngresarModal();
@@ -157,7 +156,6 @@ function handleGuardarExtra(e) {
   const id = document.getElementById('input-extra-vehiculo-id').value;
   const detalle = document.getElementById('input-extra-detalle').value.trim();
   const costo = parseFloat(document.getElementById('input-extra-costo').value);
-
   const v = vehiculos.find(item => item.id === id);
   if (v) {
     v.trabajoExtra = {
@@ -219,24 +217,62 @@ function eliminarVehiculo(id) {
   showToast(`${v.vehiculo} eliminado definitivamente.`);
 }
 
+function getListaSegunFiltrosActuales() {
+  let list = [];
+  if (currentFilter === 'TODOS') {
+    list = vehiculos.filter(v => v.estado !== 'ARCHIVADO');
+  } else {
+    list = vehiculos.filter(v => v.estado === currentFilter);
+  }
+  if (currentMecanicoFilter) {
+    list = list.filter(v => v.mecanicoAsignado === currentMecanicoFilter);
+  }
+  return list;
+}
+
 function exportarBackup() {
+  const soloVista = confirm(
+    '¿Qué querés exportar?\n\n' +
+    'ACEPTAR = solo la vista actual (filtros de estado y mecánico que estén activos)\n' +
+    'CANCELAR = TODOS los vehículos de la app (backup completo, incluye historial)'
+  );
+
+  let lista;
+  let etiquetaArchivo;
+  if (soloVista) {
+    lista = getListaSegunFiltrosActuales();
+    const estado = currentFilter === 'TODOS' ? 'activos' : currentFilter.toLowerCase();
+    const mec = currentMecanicoFilter ? ('-' + currentMecanicoFilter) : '';
+    etiquetaArchivo = `vista-${estado}${mec}`;
+    if (lista.length === 0) {
+      showToast('No hay vehículos en la vista actual para exportar');
+      return;
+    }
+  } else {
+    lista = vehiculos.slice();
+    etiquetaArchivo = 'completo';
+  }
+
   const data = {
     exportadoEn: new Date().toISOString(),
-    version: '1.1',
-    total: vehiculos.length,
-    vehiculos: vehiculos
+    version: '1.2',
+    alcance: soloVista ? 'vista_actual' : 'completo',
+    filtroEstado: currentFilter,
+    filtroMecanico: currentMecanicoFilter,
+    total: lista.length,
+    vehiculos: lista
   };
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   const fecha = new Date().toISOString().slice(0, 10);
   a.href = url;
-  a.download = `don-ramiro-backup-${fecha}.json`;
+  a.download = `don-ramiro-${etiquetaArchivo}-${fecha}.json`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  showToast('Backup exportado correctamente');
+  showToast(soloVista ? `Exportados ${lista.length} de la vista actual` : `Backup completo: ${lista.length} vehículos`);
 }
 
 function importarBackup(event) {
