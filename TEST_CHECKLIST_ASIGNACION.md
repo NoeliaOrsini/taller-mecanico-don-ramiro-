@@ -2,7 +2,8 @@
 
 Contexto: app en navegador (local, rama `feature/asignacion-mecanico`). Tablet o celular preferible.
 
-**Prueba realizada:** 01/11/2026 · 19:24 (hora Argentina)  
+**Prueba realizada:** 01/11/2026 · 19:24 (hora Argentina)
+**Prueba complementaria (export/import):** 01/11/2026 · 20:12  
 **Probado por:** Noelia Orsini  
 **Resultado general:** Criterios de la SPEC cumplidos (con corrección de filtro en Historial durante la prueba).
 
@@ -37,8 +38,14 @@ Contexto: app en navegador (local, rama `feature/asignacion-mecanico`). Tablet o
 - [x] Semáforo ROJO / AMARILLO / VERDE
 - [x] + EXTRA y aprobación con marca de tiempo
 - [x] WhatsApp de un clic
-- [x] Exportar conserva datos (incl. mecánico)
 - [x] Eliminar desde historial
+
+## Exportar e importar (01/11/2026 · 20:12)
+- [x] Exportar pregunta el alcance: vista actual (Aceptar) o backup completo (Cancelar)
+- [x] Exportar vista actual respeta filtros de estado y mecánico
+- [x] Exportar completo incluye todos los vehículos (también historial)
+- [x] Importar avisa que reemplazará los datos actuales
+- [x] Importar un JSON anterior sin mecánico asigna Ramiro por defecto (migración)
 
 ## Notas
 - Datos de ejemplo previos se reasignaron en prueba; el flujo de uso diario arranca con asignación al ingresar.

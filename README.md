@@ -111,6 +111,14 @@ Las capturas anteriores documentan el flujo de presupuestos y WhatsApp, que se m
 
 ---
 
+## 💾 Exportar e importar
+
+- **Exportar** pregunta qué guardar:
+  - **Aceptar** → solo la **vista actual** (filtros de estado y/o mecánico activos).
+  - **Cancelar** → **backup completo** de todos los vehículos, incluido el historial.
+- **Importar** carga un archivo JSON y **reemplaza** los datos actuales de la app (pide confirmación antes).
+- Si el archivo es antiguo y algún vehículo no tiene mecánico, al importar se le asigna **Ramiro** por defecto.
+
 ## 🔒 Privacidad y almacenamiento (versión beta)
 
 - Datos solo en el navegador (`localStorage`).
