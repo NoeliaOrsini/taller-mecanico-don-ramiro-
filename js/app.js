@@ -333,16 +333,103 @@ function render() {
   document.getElementById('count-verde').innerText = countVerde;
   document.getElementById('count-archivado').innerText = countArchivado;
 
+  const filterStyles = {
+    TODOS: {
+      active: ['bg-slate-800', 'text-white'],
+      idle: ['bg-white', 'text-slate-900'],
+      countIdle: 'text-slate-900',
+      labelIdle: 'text-slate-700'
+    },
+    ROJO: {
+      active: ['bg-red-500', 'text-white'],
+      idle: ['bg-white', 'text-slate-900'],
+      countIdle: 'text-red-600',
+      labelIdle: 'text-red-700'
+    },
+    AMARILLO: {
+      active: ['bg-yellow-400', 'text-slate-900'],
+      idle: ['bg-white', 'text-slate-900'],
+      countIdle: 'text-amber-500',
+      labelIdle: 'text-amber-800'
+    },
+    VERDE: {
+      active: ['bg-green-500', 'text-white'],
+      idle: ['bg-white', 'text-slate-900'],
+      countIdle: 'text-emerald-600',
+      labelIdle: 'text-emerald-800'
+    },
+    ARCHIVADO: {
+      active: ['bg-slate-600', 'text-white'],
+      idle: ['bg-slate-200', 'text-slate-900'],
+      countIdle: 'text-slate-600',
+      labelIdle: 'text-slate-700'
+    }
+  };
+
+  ['TODOS', 'ROJO', 'AMARILLO', 'VERDE', 'ARCHIVADO'].forEach(key => {
+    const btn = document.getElementById('filter-' + key);
+    if (!btn) return;
+    const countEl = btn.querySelector('span:first-child');
+    const labelEl = btn.querySelector('span:last-child');
+    const style = filterStyles[key];
+    const isActive = currentFilter === key;
+
+    btn.classList.remove(
+      'bg-white', 'bg-slate-200', 'bg-slate-800', 'bg-slate-600',
+      'bg-red-500', 'bg-yellow-400', 'bg-green-500', 'text-white', 'text-slate-900'
+    );
+    if (countEl) {
+      countEl.classList.remove(
+        'text-slate-900', 'text-red-600', 'text-amber-500', 'text-emerald-600',
+        'text-slate-600', 'text-white'
+      );
+    }
+    if (labelEl) {
+      labelEl.classList.remove(
+        'text-slate-700', 'text-red-700', 'text-amber-800', 'text-emerald-800',
+        'text-white', 'text-slate-900'
+      );
+    }
+
+    if (isActive) {
+      style.active.forEach(c => btn.classList.add(c));
+      if (key === 'AMARILLO') {
+        if (countEl) countEl.classList.add('text-slate-900');
+        if (labelEl) labelEl.classList.add('text-slate-900');
+      } else {
+        if (countEl) countEl.classList.add('text-white');
+        if (labelEl) labelEl.classList.add('text-white');
+      }
+    } else {
+      style.idle.forEach(c => btn.classList.add(c));
+      if (countEl) countEl.classList.add(style.countIdle);
+      if (labelEl) labelEl.classList.add(style.labelIdle);
+    }
+  });
+
   MECANICOS.forEach(nombre => {
     const n = vehiculos.filter(v => v.estado !== 'ARCHIVADO' && v.mecanicoAsignado === nombre).length;
     const el = document.getElementById('count-mec-' + nombre);
     if (el) el.innerText = n;
     const btn = document.getElementById('mec-' + nombre);
     if (btn) {
+      btn.classList.remove('bg-blue-600', 'text-white', 'bg-white', 'ring-4', 'ring-blue-500');
+      const title = btn.querySelector('span:nth-child(2)');
+      const countM = btn.querySelector('span:nth-child(3)');
+      const sub = btn.querySelector('span:nth-child(4)');
+      const small = btn.querySelector('span:nth-child(1)');
       if (currentMecanicoFilter === nombre) {
-        btn.classList.add('ring-4', 'ring-blue-500');
+        btn.classList.add('bg-blue-600', 'text-white');
+        if (small) { small.classList.remove('text-slate-500'); small.classList.add('text-blue-100'); }
+        if (title) { title.classList.remove('text-slate-900'); title.classList.add('text-white'); }
+        if (countM) { countM.classList.remove('text-blue-600'); countM.classList.add('text-white'); }
+        if (sub) { sub.classList.remove('text-slate-500'); sub.classList.add('text-blue-100'); }
       } else {
-        btn.classList.remove('ring-4', 'ring-blue-500');
+        btn.classList.add('bg-white');
+        if (small) { small.classList.add('text-slate-500'); small.classList.remove('text-blue-100'); }
+        if (title) { title.classList.add('text-slate-900'); title.classList.remove('text-white'); }
+        if (countM) { countM.classList.add('text-blue-600'); countM.classList.remove('text-white'); }
+        if (sub) { sub.classList.add('text-slate-500'); sub.classList.remove('text-blue-100'); }
       }
     }
   });
@@ -350,9 +437,17 @@ function render() {
   const hint = document.getElementById('filtro-mecanico-hint');
   const hintName = document.getElementById('filtro-mecanico-nombre');
   if (hint && hintName) {
+    const estadoLabel = {
+      TODOS: 'Activos',
+      ROJO: 'En reparación',
+      AMARILLO: 'Cotizando',
+      VERDE: 'Listos',
+      ARCHIVADO: 'Historial'
+    }[currentFilter] || currentFilter;
+
     if (currentMecanicoFilter) {
       hint.classList.remove('hidden');
-      hintName.innerText = currentMecanicoFilter;
+      hintName.innerText = currentMecanicoFilter + ' · vista: ' + estadoLabel;
     } else {
       hint.classList.add('hidden');
     }
