@@ -43,17 +43,24 @@ window.onload = function() {
   const stored = localStorage.getItem('don_ramiro_vehiculos');
   if (stored) {
     try {
-      vehiculos = JSON.parse(stored);
-      let changed = false;
-      vehiculos.forEach(v => {
-        if (!v.mecanicoAsignado || !MECANICOS.includes(v.mecanicoAsignado)) {
-          v.mecanicoAsignado = 'Ramiro';
-          changed = true;
-        }
-      });
-      if (changed) saveToLocalStorage();
+      const parsed = JSON.parse(stored);
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        vehiculos = INITIAL_VEHICULOS;
+        saveToLocalStorage();
+      } else {
+        vehiculos = parsed;
+        let changed = false;
+        vehiculos.forEach(v => {
+          if (!v.mecanicoAsignado || !MECANICOS.includes(v.mecanicoAsignado)) {
+            v.mecanicoAsignado = 'Ramiro';
+            changed = true;
+          }
+        });
+        if (changed) saveToLocalStorage();
+      }
     } catch(e) {
       vehiculos = INITIAL_VEHICULOS;
+      saveToLocalStorage();
     }
   } else {
     vehiculos = INITIAL_VEHICULOS;
@@ -314,7 +321,6 @@ function showToast(msg) {
 }
 
 function render() {
-  // Update counters
   const countActivos = vehiculos.filter(v => v.estado !== 'ARCHIVADO').length;
   const countRojo = vehiculos.filter(v => v.estado === 'ROJO').length;
   const countAmarillo = vehiculos.filter(v => v.estado === 'AMARILLO').length;
@@ -327,7 +333,6 @@ function render() {
   document.getElementById('count-verde').innerText = countVerde;
   document.getElementById('count-archivado').innerText = countArchivado;
 
-  // Contadores por mecánico (solo activos)
   MECANICOS.forEach(nombre => {
     const n = vehiculos.filter(v => v.estado !== 'ARCHIVADO' && v.mecanicoAsignado === nombre).length;
     const el = document.getElementById('count-mec-' + nombre);
@@ -353,7 +358,6 @@ function render() {
     }
   }
 
-  // Filter vehicles
   let list = [];
   if (currentFilter === 'TODOS') {
     list = vehiculos.filter(v => v.estado !== 'ARCHIVADO');
@@ -391,8 +395,6 @@ function render() {
 
     return `
       <div class="bg-white rounded-3xl p-4 sm:p-5 arcade-card flex flex-col justify-between space-y-4">
-        
-        <!-- Card Header -->
         <div>
           <div class="flex justify-between items-start mb-2">
             <div class="w-full">
@@ -412,13 +414,11 @@ function render() {
             </div>
           </div>
 
-          <!-- Motivo Inicial -->
           <div class="bg-slate-100 border-2 border-black rounded-xl p-3 mt-3">
             <span class="text-[10px] font-black text-slate-500 uppercase block">Motivo de ingreso:</span>
             <p class="text-xs sm:text-sm font-bold text-slate-800">${v.motivo}</p>
           </div>
 
-          <!-- Sección Trabajo Extra Adicional (si existe) -->
           ${v.trabajoExtra ? `
             <div class="mt-3 p-3 sm:p-3.5 border-3 border-black rounded-2xl ${v.trabajoExtra.aprobado ? 'bg-emerald-50 border-emerald-600' : 'bg-amber-50 border-amber-500'}">
               <div class="flex flex-wrap items-center justify-between gap-1">
@@ -429,7 +429,6 @@ function render() {
                 <span class="text-sm sm:text-base font-black text-slate-900">$${v.trabajoExtra.costo.toLocaleString('es-AR')}</span>
               </div>
               <p class="text-xs sm:text-sm font-bold text-slate-800 mt-1">${v.trabajoExtra.detalle}</p>
-              
               ${v.trabajoExtra.aprobado ? `
                 <div class="mt-2 text-[10px] sm:text-[11px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-400 p-1.5 rounded-lg">
                   <i class="fa-solid fa-clock"></i> Registrado el: ${v.trabajoExtra.fechaAprobacion}
@@ -444,7 +443,6 @@ function render() {
           ` : ''}
         </div>
 
-        <!-- Botones Semáforo Táctiles -->
         <div>
           ${v.estado !== 'ARCHIVADO' ? `
             <span class="block text-[10px] font-black text-slate-500 uppercase mb-1.5">Cambiar estado del auto:</span>
@@ -452,30 +450,23 @@ function render() {
               <button onclick="changeEstado('${v.id}', 'ROJO')" class="arcade-btn-sm py-2.5 px-1 rounded-xl font-black text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 ${v.estado === 'ROJO' ? 'btn-rojo-active' : 'bg-slate-100 text-slate-700 hover:bg-red-100'}">
                 <span>🔴</span> <span class="hidden sm:inline">Reparando</span><span class="sm:hidden">Repara</span>
               </button>
-
               <button onclick="changeEstado('${v.id}', 'AMARILLO')" class="arcade-btn-sm py-2.5 px-1 rounded-xl font-black text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 ${v.estado === 'AMARILLO' ? 'btn-amarillo-active' : 'bg-slate-100 text-slate-700 hover:bg-amber-100'}">
                 <span>🟡</span> <span class="hidden sm:inline">Cotizando</span><span class="sm:hidden">Cotiza</span>
               </button>
-
               <button onclick="changeEstado('${v.id}', 'VERDE')" class="arcade-btn-sm py-2.5 px-1 rounded-xl font-black text-[11px] sm:text-xs uppercase flex items-center justify-center gap-1 ${v.estado === 'VERDE' ? 'btn-verde-active' : 'bg-slate-100 text-slate-700 hover:bg-emerald-100'}">
                 <span>🟢</span> <span>Listo</span>
               </button>
             </div>
-
-            <!-- Acciones WhatsApp y Extra -->
             <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t-2 border-slate-200">
               <button onclick="openExtraModal('${v.id}')" class="arcade-btn-sm bg-amber-400 hover:bg-amber-300 text-slate-900 font-black py-2.5 px-2 rounded-xl text-xs flex items-center justify-center space-x-1">
                 <i class="fa-solid fa-plus-circle"></i>
                 <span>+ EXTRA</span>
               </button>
-
               <button onclick="enviarWhatsAppAviso('${v.id}')" class="arcade-btn-sm bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-2 rounded-xl text-xs flex items-center justify-center space-x-1">
                 <i class="fa-brands fa-whatsapp text-sm sm:text-base"></i>
                 <span>WHATSAPP</span>
               </button>
             </div>
-
-            <!-- Botón de Archivar -->
             <div class="mt-3 text-right">
               <button onclick="archivarVehiculo('${v.id}')" class="w-full arcade-btn-sm bg-slate-200 hover:bg-slate-300 text-slate-800 font-black py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1">
                 <i class="fa-solid fa-box-archive"></i>
@@ -483,7 +474,6 @@ function render() {
               </button>
             </div>
           ` : `
-            <!-- Estado Archivados -->
             <div class="pt-2 border-t-2 border-slate-200 grid grid-cols-2 gap-2">
               <button onclick="reactivarVehiculo('${v.id}')" class="arcade-btn-sm bg-blue-600 hover:bg-blue-500 text-white font-black py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1">
                 <i class="fa-solid fa-rotate-left"></i>
@@ -496,7 +486,6 @@ function render() {
             </div>
           `}
         </div>
-
       </div>
     `;
   }).join('');

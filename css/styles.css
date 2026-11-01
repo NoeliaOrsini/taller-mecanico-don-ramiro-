@@ -8,7 +8,6 @@ body {
   background-color: #f4f4f6;
 }
 
-/* Custom Arcade/Neobrutalism Shadows & Tactile feel */
 .arcade-card {
   border: 3px solid #000;
   box-shadow: 5px 5px 0px #000;
@@ -38,7 +37,6 @@ body {
   box-shadow: 1px 1px 0px #000;
 }
 
-/* Custom high contrast semáforo active states */
 .btn-rojo-active {
   background-color: #ef4444 !important;
   color: #ffffff !important;
@@ -62,4 +60,8 @@ body {
 
 .mec-btn.ring-4 {
   background-color: #eff6ff;
+}
+
+.mec-btn {
+  min-height: 88px;
 }
