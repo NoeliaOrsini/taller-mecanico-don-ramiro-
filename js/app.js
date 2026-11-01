@@ -2,7 +2,8 @@
    Taller Mecánico Don Ramiro - App Logic
    ============================================ */
 
-// Initial Seed Data
+const MECANICOS = ["Ramiro", "Carlos", "Ana", "Luis"];
+
 const INITIAL_VEHICULOS = [
   {
     id: "veh-1",
@@ -12,6 +13,7 @@ const INITIAL_VEHICULOS = [
     patente: "AB 222 CD",
     motivo: "Pérdida de aceite al estacionar",
     estado: "AMARILLO",
+    mecanicoAsignado: "Ramiro",
     trabajoExtra: {
       detalle: "Cambio de junta de carter y filtro de aceite adicional",
       costo: 85000,
@@ -28,18 +30,28 @@ const INITIAL_VEHICULOS = [
     patente: "AC 888 EF",
     motivo: "Service de 50.000km y alineación",
     estado: "ROJO",
+    mecanicoAsignado: "Carlos",
     trabajoExtra: null
   }
 ];
 
 let vehiculos = [];
 let currentFilter = 'TODOS';
+let currentMecanicoFilter = null;
 
 window.onload = function() {
   const stored = localStorage.getItem('don_ramiro_vehiculos');
   if (stored) {
     try {
       vehiculos = JSON.parse(stored);
+      let changed = false;
+      vehiculos.forEach(v => {
+        if (!v.mecanicoAsignado || !MECANICOS.includes(v.mecanicoAsignado)) {
+          v.mecanicoAsignado = 'Ramiro';
+          changed = true;
+        }
+      });
+      if (changed) saveToLocalStorage();
     } catch(e) {
       vehiculos = INITIAL_VEHICULOS;
     }
@@ -57,6 +69,25 @@ function saveToLocalStorage() {
 function setFilter(filter) {
   currentFilter = filter;
   render();
+}
+
+function setMecanicoFilter(nombre) {
+  if (nombre === null || currentMecanicoFilter === nombre) {
+    currentMecanicoFilter = null;
+  } else {
+    currentMecanicoFilter = nombre;
+  }
+  render();
+}
+
+function cambiarMecanico(id, nuevoMecanico) {
+  if (!MECANICOS.includes(nuevoMecanico)) return;
+  const v = vehiculos.find(item => item.id === id);
+  if (!v) return;
+  v.mecanicoAsignado = nuevoMecanico;
+  saveToLocalStorage();
+  render();
+  showToast(`${v.vehiculo} asignado a ${nuevoMecanico}`);
 }
 
 function changeEstado(id, nuevoEstado) {
@@ -90,6 +121,11 @@ function closeExtraModal() {
 
 function handleIngresarVehiculo(e) {
   e.preventDefault();
+  const mecanico = document.getElementById('input-mecanico').value;
+  if (!mecanico || !MECANICOS.includes(mecanico)) {
+    showToast('Elegí un mecánico para asignar el vehículo');
+    return;
+  }
   const nuevo = {
     id: 'veh-' + Date.now(),
     cliente: document.getElementById('input-cliente').value.trim(),
@@ -98,6 +134,7 @@ function handleIngresarVehiculo(e) {
     patente: document.getElementById('input-patente').value.trim().toUpperCase(),
     motivo: document.getElementById('input-motivo').value.trim(),
     estado: 'ROJO',
+    mecanicoAsignado: mecanico,
     trabajoExtra: null
   };
 
@@ -182,7 +219,7 @@ function eliminarVehiculo(id) {
 function exportarBackup() {
   const data = {
     exportadoEn: new Date().toISOString(),
-    version: '1.0',
+    version: '1.1',
     total: vehiculos.length,
     vehiculos: vehiculos
   };
@@ -224,7 +261,12 @@ function importarBackup(event) {
         return;
       }
 
-      vehiculos = lista;
+      vehiculos = lista.map(v => {
+        if (!v.mecanicoAsignado || !MECANICOS.includes(v.mecanicoAsignado)) {
+          v.mecanicoAsignado = 'Ramiro';
+        }
+        return v;
+      });
       saveToLocalStorage();
       render();
       showToast(`Importados ${lista.length} vehículos`);
@@ -285,12 +327,41 @@ function render() {
   document.getElementById('count-verde').innerText = countVerde;
   document.getElementById('count-archivado').innerText = countArchivado;
 
+  // Contadores por mecánico (solo activos)
+  MECANICOS.forEach(nombre => {
+    const n = vehiculos.filter(v => v.estado !== 'ARCHIVADO' && v.mecanicoAsignado === nombre).length;
+    const el = document.getElementById('count-mec-' + nombre);
+    if (el) el.innerText = n;
+    const btn = document.getElementById('mec-' + nombre);
+    if (btn) {
+      if (currentMecanicoFilter === nombre) {
+        btn.classList.add('ring-4', 'ring-blue-500');
+      } else {
+        btn.classList.remove('ring-4', 'ring-blue-500');
+      }
+    }
+  });
+
+  const hint = document.getElementById('filtro-mecanico-hint');
+  const hintName = document.getElementById('filtro-mecanico-nombre');
+  if (hint && hintName) {
+    if (currentMecanicoFilter) {
+      hint.classList.remove('hidden');
+      hintName.innerText = currentMecanicoFilter;
+    } else {
+      hint.classList.add('hidden');
+    }
+  }
+
   // Filter vehicles
   let list = [];
   if (currentFilter === 'TODOS') {
     list = vehiculos.filter(v => v.estado !== 'ARCHIVADO');
   } else {
     list = vehiculos.filter(v => v.estado === currentFilter);
+  }
+  if (currentMecanicoFilter && currentFilter !== 'ARCHIVADO') {
+    list = list.filter(v => v.mecanicoAsignado === currentMecanicoFilter);
   }
 
   const container = document.getElementById('vehiculos-container');
@@ -330,6 +401,14 @@ function render() {
               </span>
               <h2 class="text-xl sm:text-2xl font-black text-slate-900 leading-tight uppercase break-words">${v.vehiculo}</h2>
               <p class="text-xs sm:text-sm font-bold text-slate-500 mt-0.5">${v.cliente} · <span class="bg-slate-200 border border-black px-1.5 py-0.5 rounded text-xs text-slate-900">${v.patente}</span></p>
+              <div class="mt-2 flex flex-wrap items-center gap-2">
+                <span class="inline-flex items-center gap-1 bg-blue-100 border-2 border-black text-blue-900 text-[10px] sm:text-xs font-black px-2 py-1 rounded-lg uppercase">
+                  <i class="fa-solid fa-user-gear"></i> ${v.mecanicoAsignado || 'Ramiro'}
+                </span>
+                <select onchange="cambiarMecanico('${v.id}', this.value)" class="text-[10px] sm:text-xs font-bold border-2 border-black rounded-lg px-2 py-1 bg-white max-w-[140px]">
+                  ${MECANICOS.map(m => `<option value="${m}" ${m === (v.mecanicoAsignado || 'Ramiro') ? 'selected' : ''}>${m}</option>`).join('')}
+                </select>
+              </div>
             </div>
           </div>
 
@@ -353,7 +432,7 @@ function render() {
               
               ${v.trabajoExtra.aprobado ? `
                 <div class="mt-2 text-[10px] sm:text-[11px] font-bold text-emerald-700 bg-emerald-100 border border-emerald-400 p-1.5 rounded-lg">
-                  <i class="fa-solid fa-clock-check"></i> Registrado el: ${v.trabajoExtra.fechaAprobacion}
+                  <i class="fa-solid fa-clock"></i> Registrado el: ${v.trabajoExtra.fechaAprobacion}
                 </div>
               ` : `
                 <button onclick="simularAprobacionCliente('${v.id}')" class="mt-3 w-full arcade-btn-sm bg-emerald-500 hover:bg-emerald-400 text-white font-black py-2.5 px-3 rounded-xl text-xs flex items-center justify-center space-x-2">
