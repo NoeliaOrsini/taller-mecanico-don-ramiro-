@@ -30,7 +30,7 @@ body {
   border: 2px solid #000;
   box-shadow: 3px 3px 0px #000;
   touch-action: manipulation;
-  min-height: 48px; /* Tareas táctiles cómodas en celular */
+  min-height: 48px;
 }
 
 .arcade-btn-sm:active {
@@ -40,22 +40,26 @@ body {
 
 /* Custom high contrast semáforo active states */
 .btn-rojo-active {
-  background-color: #ff2a2a !important;
+  background-color: #ef4444 !important;
   color: #ffffff !important;
   border-color: #000000 !important;
   box-shadow: inset 0px 0px 0px 3px #000000, 3px 3px 0px #000 !important;
 }
 
 .btn-amarillo-active {
-  background-color: #ffcc00 !important;
+  background-color: #eab308 !important;
   color: #000000 !important;
   border-color: #000000 !important;
   box-shadow: inset 0px 0px 0px 3px #000000, 3px 3px 0px #000 !important;
 }
 
 .btn-verde-active {
-  background-color: #00d053 !important;
+  background-color: #22c55e !important;
   color: #ffffff !important;
   border-color: #000000 !important;
   box-shadow: inset 0px 0px 0px 3px #000000, 3px 3px 0px #000 !important;
+}
+
+.mec-btn.ring-4 {
+  background-color: #eff6ff;
 }
