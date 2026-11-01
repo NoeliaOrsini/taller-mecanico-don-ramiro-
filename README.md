@@ -82,8 +82,6 @@ Checklist de prueba: [`TEST_CHECKLIST_ASIGNACION.md`](TEST_CHECKLIST_ASIGNACION.
 
 ### Flujo original (presupuestos y WhatsApp)
 
-Las capturas siguientes muestran el flujo de ingreso, trabajo extra y WhatsApp (versión anterior al panel de mecánicos; el flujo sigue vigente).
-
 ### Pantalla principal (referencia previa)
 ![Pantalla principal - Don Ramiro](assets/don_ramiro.png)
 
@@ -103,9 +101,13 @@ Con el feature de asignación, la pantalla suma:
 - **4 recuadros de mecánicos** (contadores de autos activos)
 - **Filtros de semáforo** con color sólido en la vista activa
 - **Badge + selector de mecánico** en cada tarjeta
-- Leyenda del tipo: `Filtrando por mecánico: Carlos · vista: Listos`
+- Leyenda del tipo: `Filtrando por mecánico: Carlos · vista: En reparación`
 
-> **Nota sobre capturas:** conviene sumar 1 o 2 imágenes nuevas en `assets/` (por ejemplo `panel_mecanicos.png` y `filtro_activo.png`) tomadas desde la rama del feature, y enlazarlas aquí tras el merge. Mientras tanto, las capturas de arriba documentan el flujo de presupuestos que no se eliminó.
+![Panel de mecánicos y filtro activo](assets/panel_mecanicos_filtro.png)
+
+*Captura: vista Reparando + filtro Carlos (ICP: tablet compartida, saber quién tiene cada auto).*
+
+Las capturas anteriores documentan el flujo de presupuestos y WhatsApp, que se mantiene.
 
 ---
 
@@ -153,13 +155,14 @@ taller-mecanico-don-ramiro-/
 │   ├── don_ramiro.png
 │   ├── ingresar.png
 │   ├── trabajo_adicional.png
-│   └── whatsapp.png
-├── AGENT_CONTEXT.md              # Contexto general del agente
-├── SPEC_PRESUPUESTOS.md          # Feature: cotización y aprobación
-├── SPEC_ASIGNACION_MECANICO.md   # Feature: asignación de mecánico
-├── ICP_PERSONA.md                # ICP y user persona
-├── TEST_CHECKLIST_ASIGNACION.md  # Pruebas manuales del feature nuevo
-├── BRAND_SKILL.md                # Guía de marca
+│   ├── whatsapp.png
+│   └── panel_mecanicos_filtro.png  # Asignación + filtros (feature nuevo)
+├── AGENT_CONTEXT.md
+├── SPEC_PRESUPUESTOS.md
+├── SPEC_ASIGNACION_MECANICO.md
+├── ICP_PERSONA.md
+├── TEST_CHECKLIST_ASIGNACION.md
+├── BRAND_SKILL.md
 ├── README.md
 └── .gitignore
 ```
@@ -183,8 +186,6 @@ Detalle: `TEST_CHECKLIST_ASIGNACION.md`.
 ## 🚀 Uso local
 
 ```bash
-# Abrir index.html
-# o
 python -m http.server 8000
 ```
 
