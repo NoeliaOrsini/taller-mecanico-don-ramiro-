@@ -193,7 +193,6 @@ function simularAprobacionCliente(id) {
 function archivarVehiculo(id) {
   const v = vehiculos.find(item => item.id === id);
   if (!v) return;
-  
   v.estado = 'ARCHIVADO';
   saveToLocalStorage();
   render();
@@ -203,7 +202,6 @@ function archivarVehiculo(id) {
 function reactivarVehiculo(id) {
   const v = vehiculos.find(item => item.id === id);
   if (!v) return;
-  
   v.estado = 'ROJO';
   saveToLocalStorage();
   render();
@@ -213,10 +211,8 @@ function reactivarVehiculo(id) {
 function eliminarVehiculo(id) {
   const v = vehiculos.find(item => item.id === id);
   if (!v) return;
-
   const confirmar = confirm(`¿Eliminar definitivamente el vehículo ${v.vehiculo} (${v.patente})?\n\nEsta acción no se puede deshacer. Asegurate de haber exportado el backup si necesitás conservar el historial.`);
   if (!confirmar) return;
-
   vehiculos = vehiculos.filter(item => item.id !== id);
   saveToLocalStorage();
   render();
@@ -230,7 +226,6 @@ function exportarBackup() {
     total: vehiculos.length,
     vehiculos: vehiculos
   };
-
   const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -247,13 +242,11 @@ function exportarBackup() {
 function importarBackup(event) {
   const file = event.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = function(e) {
     try {
       const data = JSON.parse(e.target.result);
       let lista = [];
-
       if (Array.isArray(data)) {
         lista = data;
       } else if (data.vehiculos && Array.isArray(data.vehiculos)) {
@@ -261,13 +254,11 @@ function importarBackup(event) {
       } else {
         throw new Error('Formato no válido');
       }
-
       const confirmar = confirm(`Se van a importar ${lista.length} vehículo(s).\n\nEsto reemplazará los datos actuales de la app.\n¿Continuar?`);
       if (!confirmar) {
         event.target.value = '';
         return;
       }
-
       vehiculos = lista.map(v => {
         if (!v.mecanicoAsignado || !MECANICOS.includes(v.mecanicoAsignado)) {
           v.mecanicoAsignado = 'Ramiro';
@@ -289,14 +280,11 @@ function importarBackup(event) {
 function enviarWhatsAppAviso(id) {
   const v = vehiculos.find(item => item.id === id);
   if (!v) return;
-
   const telefonoLimpio = v.telefono.replace(/\D/g, '');
-
   if (!telefonoLimpio) {
     showToast("Número de teléfono no válido");
     return;
   }
-
   let mensaje = "";
   if (v.estado === 'AMARILLO' && v.trabajoExtra) {
     mensaje = `Hola ${v.cliente}, te escribimos de Taller Don Ramiro. Al revisar tu ${v.vehiculo} (${v.patente}) encontramos una reparación adicional necesaria: *${v.trabajoExtra.detalle}*. El costo adicional es de *$${v.trabajoExtra.costo.toLocaleString()}*. Por favor responde este mensaje para autorizar el trabajo. Gracias!`;
@@ -305,7 +293,6 @@ function enviarWhatsAppAviso(id) {
   } else {
     mensaje = `Hola ${v.cliente}, te escribimos de Taller Don Ramiro sobre tu vehículo *${v.vehiculo}* (${v.patente}).`;
   }
-
   const url = `https://wa.me/${telefonoLimpio}?text=${encodeURIComponent(mensaje)}`;
   window.location.href = url;
 }
@@ -334,36 +321,11 @@ function render() {
   document.getElementById('count-archivado').innerText = countArchivado;
 
   const filterStyles = {
-    TODOS: {
-      active: ['bg-slate-800', 'text-white'],
-      idle: ['bg-white', 'text-slate-900'],
-      countIdle: 'text-slate-900',
-      labelIdle: 'text-slate-700'
-    },
-    ROJO: {
-      active: ['bg-red-500', 'text-white'],
-      idle: ['bg-white', 'text-slate-900'],
-      countIdle: 'text-red-600',
-      labelIdle: 'text-red-700'
-    },
-    AMARILLO: {
-      active: ['bg-yellow-400', 'text-slate-900'],
-      idle: ['bg-white', 'text-slate-900'],
-      countIdle: 'text-amber-500',
-      labelIdle: 'text-amber-800'
-    },
-    VERDE: {
-      active: ['bg-green-500', 'text-white'],
-      idle: ['bg-white', 'text-slate-900'],
-      countIdle: 'text-emerald-600',
-      labelIdle: 'text-emerald-800'
-    },
-    ARCHIVADO: {
-      active: ['bg-slate-600', 'text-white'],
-      idle: ['bg-slate-200', 'text-slate-900'],
-      countIdle: 'text-slate-600',
-      labelIdle: 'text-slate-700'
-    }
+    TODOS: { active: ['bg-slate-800', 'text-white'], idle: ['bg-white', 'text-slate-900'], countIdle: 'text-slate-900', labelIdle: 'text-slate-700' },
+    ROJO: { active: ['bg-red-500', 'text-white'], idle: ['bg-white', 'text-slate-900'], countIdle: 'text-red-600', labelIdle: 'text-red-700' },
+    AMARILLO: { active: ['bg-yellow-400', 'text-slate-900'], idle: ['bg-white', 'text-slate-900'], countIdle: 'text-amber-500', labelIdle: 'text-amber-800' },
+    VERDE: { active: ['bg-green-500', 'text-white'], idle: ['bg-white', 'text-slate-900'], countIdle: 'text-emerald-600', labelIdle: 'text-emerald-800' },
+    ARCHIVADO: { active: ['bg-slate-600', 'text-white'], idle: ['bg-slate-200', 'text-slate-900'], countIdle: 'text-slate-600', labelIdle: 'text-slate-700' }
   };
 
   ['TODOS', 'ROJO', 'AMARILLO', 'VERDE', 'ARCHIVADO'].forEach(key => {
@@ -373,24 +335,9 @@ function render() {
     const labelEl = btn.querySelector('span:last-child');
     const style = filterStyles[key];
     const isActive = currentFilter === key;
-
-    btn.classList.remove(
-      'bg-white', 'bg-slate-200', 'bg-slate-800', 'bg-slate-600',
-      'bg-red-500', 'bg-yellow-400', 'bg-green-500', 'text-white', 'text-slate-900'
-    );
-    if (countEl) {
-      countEl.classList.remove(
-        'text-slate-900', 'text-red-600', 'text-amber-500', 'text-emerald-600',
-        'text-slate-600', 'text-white'
-      );
-    }
-    if (labelEl) {
-      labelEl.classList.remove(
-        'text-slate-700', 'text-red-700', 'text-amber-800', 'text-emerald-800',
-        'text-white', 'text-slate-900'
-      );
-    }
-
+    btn.classList.remove('bg-white', 'bg-slate-200', 'bg-slate-800', 'bg-slate-600', 'bg-red-500', 'bg-yellow-400', 'bg-green-500', 'text-white', 'text-slate-900');
+    if (countEl) countEl.classList.remove('text-slate-900', 'text-red-600', 'text-amber-500', 'text-emerald-600', 'text-slate-600', 'text-white');
+    if (labelEl) labelEl.classList.remove('text-slate-700', 'text-red-700', 'text-amber-800', 'text-emerald-800', 'text-white', 'text-slate-900');
     if (isActive) {
       style.active.forEach(c => btn.classList.add(c));
       if (key === 'AMARILLO') {
@@ -437,14 +384,7 @@ function render() {
   const hint = document.getElementById('filtro-mecanico-hint');
   const hintName = document.getElementById('filtro-mecanico-nombre');
   if (hint && hintName) {
-    const estadoLabel = {
-      TODOS: 'Activos',
-      ROJO: 'En reparación',
-      AMARILLO: 'Cotizando',
-      VERDE: 'Listos',
-      ARCHIVADO: 'Historial'
-    }[currentFilter] || currentFilter;
-
+    const estadoLabel = { TODOS: 'Activos', ROJO: 'En reparación', AMARILLO: 'Cotizando', VERDE: 'Listos', ARCHIVADO: 'Historial' }[currentFilter] || currentFilter;
     if (currentMecanicoFilter) {
       hint.classList.remove('hidden');
       hintName.innerText = currentMecanicoFilter + ' · vista: ' + estadoLabel;
@@ -459,7 +399,7 @@ function render() {
   } else {
     list = vehiculos.filter(v => v.estado === currentFilter);
   }
-  if (currentMecanicoFilter && currentFilter !== 'ARCHIVADO') {
+  if (currentMecanicoFilter) {
     list = list.filter(v => v.mecanicoAsignado === currentMecanicoFilter);
   }
 
@@ -493,9 +433,7 @@ function render() {
         <div>
           <div class="flex justify-between items-start mb-2">
             <div class="w-full">
-              <span class="inline-block border-2 border-black ${badgeColor} text-[10px] sm:text-[11px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1.5">
-                ${badgeText}
-              </span>
+              <span class="inline-block border-2 border-black ${badgeColor} text-[10px] sm:text-[11px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-1.5">${badgeText}</span>
               <h2 class="text-xl sm:text-2xl font-black text-slate-900 leading-tight uppercase break-words">${v.vehiculo}</h2>
               <p class="text-xs sm:text-sm font-bold text-slate-500 mt-0.5">${v.cliente} · <span class="bg-slate-200 border border-black px-1.5 py-0.5 rounded text-xs text-slate-900">${v.patente}</span></p>
               <div class="mt-2 flex flex-wrap items-center gap-2">
@@ -508,12 +446,10 @@ function render() {
               </div>
             </div>
           </div>
-
           <div class="bg-slate-100 border-2 border-black rounded-xl p-3 mt-3">
             <span class="text-[10px] font-black text-slate-500 uppercase block">Motivo de ingreso:</span>
             <p class="text-xs sm:text-sm font-bold text-slate-800">${v.motivo}</p>
           </div>
-
           ${v.trabajoExtra ? `
             <div class="mt-3 p-3 sm:p-3.5 border-3 border-black rounded-2xl ${v.trabajoExtra.aprobado ? 'bg-emerald-50 border-emerald-600' : 'bg-amber-50 border-amber-500'}">
               <div class="flex flex-wrap items-center justify-between gap-1">
@@ -537,7 +473,6 @@ function render() {
             </div>
           ` : ''}
         </div>
-
         <div>
           ${v.estado !== 'ARCHIVADO' ? `
             <span class="block text-[10px] font-black text-slate-500 uppercase mb-1.5">Cambiar estado del auto:</span>
@@ -554,29 +489,24 @@ function render() {
             </div>
             <div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t-2 border-slate-200">
               <button onclick="openExtraModal('${v.id}')" class="arcade-btn-sm bg-amber-400 hover:bg-amber-300 text-slate-900 font-black py-2.5 px-2 rounded-xl text-xs flex items-center justify-center space-x-1">
-                <i class="fa-solid fa-plus-circle"></i>
-                <span>+ EXTRA</span>
+                <i class="fa-solid fa-plus-circle"></i><span>+ EXTRA</span>
               </button>
               <button onclick="enviarWhatsAppAviso('${v.id}')" class="arcade-btn-sm bg-emerald-600 hover:bg-emerald-500 text-white font-black py-2.5 px-2 rounded-xl text-xs flex items-center justify-center space-x-1">
-                <i class="fa-brands fa-whatsapp text-sm sm:text-base"></i>
-                <span>WHATSAPP</span>
+                <i class="fa-brands fa-whatsapp text-sm sm:text-base"></i><span>WHATSAPP</span>
               </button>
             </div>
-            <div class="mt-3 text-right">
+            <div class="mt-3">
               <button onclick="archivarVehiculo('${v.id}')" class="w-full arcade-btn-sm bg-slate-200 hover:bg-slate-300 text-slate-800 font-black py-2 px-3 rounded-xl text-xs flex items-center justify-center gap-1">
-                <i class="fa-solid fa-box-archive"></i>
-                <span>ARCHIVAR EN HISTORIAL</span>
+                <i class="fa-solid fa-box-archive"></i><span>ARCHIVAR EN HISTORIAL</span>
               </button>
             </div>
           ` : `
             <div class="pt-2 border-t-2 border-slate-200 grid grid-cols-2 gap-2">
               <button onclick="reactivarVehiculo('${v.id}')" class="arcade-btn-sm bg-blue-600 hover:bg-blue-500 text-white font-black py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1">
-                <i class="fa-solid fa-rotate-left"></i>
-                <span>REACTIVAR</span>
+                <i class="fa-solid fa-rotate-left"></i><span>REACTIVAR</span>
               </button>
               <button onclick="eliminarVehiculo('${v.id}')" class="arcade-btn-sm bg-red-500 hover:bg-red-400 text-white font-black py-2 px-2 rounded-xl text-xs flex items-center justify-center gap-1">
-                <i class="fa-solid fa-trash"></i>
-                <span>ELIMINAR</span>
+                <i class="fa-solid fa-trash"></i><span>ELIMINAR</span>
               </button>
             </div>
           `}
