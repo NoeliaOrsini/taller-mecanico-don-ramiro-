@@ -17,17 +17,17 @@ Se trabajó con **mega prompting** y **Spec Driven Development**: contexto del p
 
 **Demo principal (Don Ramiro):** [https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/](https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/)
 
-> La demo de Pages refleja lo publicado en `main`. El feature de asignación de mecánico vive en la rama `feature/asignacion-mecanico` hasta el merge.
-
 ---
 
 ### Prueba con otra herramienta (Lovable)
 
-El mismo prompt inicial y, después, las **mismas especificaciones** se probaron desde cero en **Lovable**, sin reutilizar el código de este repositorio.
+El mismo prompt inicial y, después, las mismas especificaciones (contexto / ICP / SPEC) se probaron desde cero en **Lovable**, sin reutilizar el código de este repositorio.
 
-Para diferenciarla de la versión principal de este repo (**Don Ramiro**), esa variante se llama **Don Mario**.
+Primero se validó el flujo base (semáforo, trabajos extra, aprobación con marca de tiempo). Después, con `ICP_PERSONA.md` y `SPEC_ASIGNACION_MECANICO.md`, se pidió actualizar la app para incorporar la asignación de mecánico.
 
-**Demo Lovable (Don Mario):** [https://taller-mecanico-don-mario.lovable.app](https://taller-mecanico-don-mario.lovable.app)
+El resultado fue muy similar al de este repo: panel de 4 mecánicos, asignación obligatoria al ingresar, filtros combinados (estado + mecánico), semáforo con estado activo bien marcado y reasignación desde la tarjeta, manteniendo presupuestos y WhatsApp.
+
+**Demo Lovable:** [https://taller-mecanico-don-ramiro.lovable.app](https://taller-mecanico-don-ramiro.lovable.app)
 
 ---
 
@@ -179,7 +179,7 @@ taller-mecanico-don-ramiro-/
 
 ## 📱 Cómo probar la aplicación
 
-1. Demo online (tras merge) o `index.html` local **con** carpetas `js/` y `css/`.
+1. Demo online o `index.html` local **con** carpetas `js/` y `css/`.
 2. **INGRESAR VEHÍCULO** — completar datos y **elegir mecánico** (obligatorio).
 3. Revisar el **panel de 4 mecánicos** y los contadores.
 4. Filtrar por estado (semáforo) y por mecánico; comprobar la leyenda de filtro.
