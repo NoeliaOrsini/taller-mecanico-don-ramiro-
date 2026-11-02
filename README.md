@@ -2,13 +2,12 @@
 
 **App de Gestión Táctil & Notificaciones WhatsApp**
 
-Una aplicación web **mobile-first** con estilo retro/arcade diseñada para la gestión operativa en tiempo real de talleres mecánicos. Optimizada para entornos de trabajo exigentes: facilita el control visual del estado de los vehículos y automatiza las comunicaciones con los clientes vía WhatsApp.
+Una aplicación web **mobile-first** con estilo retro/arcade diseñada para la gestión operativa en tiempo real de talleres mecánicos. Optimizada para entornos de trabajo exigentes: facilita el control visual del estado de los vehículos, la **asignación por mecánico** y las comunicaciones con los clientes vía WhatsApp.
 
 Este proyecto no partió de un prompt genérico.  
 Se desarrolló a partir de un **prompt personal**, armado en función de un problema concreto del taller, centrado siempre en las necesidades del cliente, sus prioridades y sus gustos.
 
-Se trabajó con **mega prompting** y, más adelante, con una aproximación de **Spec Driven Development**: contexto del proyecto, especificación del feature principal y guía de marca (`AGENT_CONTEXT.md`, `SPEC_PRESUPUESTOS.md`, `BRAND_SKILL.md`).  
-La idea fue no depender de un solo prompt, sino dejar por escrito los requerimientos reales para obtener un resultado más preciso, coherente y alineado con el uso diario del taller.
+Se trabajó con **mega prompting** y **Spec Driven Development**: contexto del proyecto, especificación de features, ICP/user persona y guía de marca.
 
 > Diseño inicial con **Gemini Canvas** · Refactor y especificación con **Grok** · Deploy en **GitHub Pages**.
 
@@ -18,53 +17,72 @@ La idea fue no depender de un solo prompt, sino dejar por escrito los requerimie
 
 **Demo principal (Don Ramiro):** [https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/](https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/)
 
+> La demo de Pages refleja lo publicado en `main`. El feature de asignación de mecánico vive en la rama `feature/asignacion-mecanico` hasta el merge.
+
 ---
 
 ### Prueba con otra herramienta (Lovable)
 
-El mismo prompt inicial y, después, las **mismas especificaciones** (`AGENT_CONTEXT.md`, `SPEC_PRESUPUESTOS.md`, `BRAND_SKILL.md`) se probaron desde cero en **Lovable**, sin reutilizar el código de este repositorio.
+El mismo prompt inicial y, después, las **mismas especificaciones** se probaron desde cero en **Lovable**, sin reutilizar el código de este repositorio.
 
-Se obtuvo un resultado alineado con la spec: semáforo de estados, trabajos extra, aprobación con marca de tiempo y exportación/importación.
-
-Para diferenciarla de la versión principal de este repo (**Don Ramiro**), esta variante se llama **Don Mario**.
+Para diferenciarla de la versión principal de este repo (**Don Ramiro**), esa variante se llama **Don Mario**.
 
 **Demo Lovable (Don Mario):** [https://taller-mecanico-don-mario.lovable.app](https://taller-mecanico-don-mario.lovable.app)
 
 ---
 
+## 👤 ICP y user persona
+
+Documento: [`ICP_PERSONA.md`](ICP_PERSONA.md)
+
+- **Perfil:** taller de **4 mecánicos**, con **tablet compartida** en el área de trabajo.
+- **Persona principal:** **Ramiro** (referente operativo; ordena ingresos y asignaciones).
+- **Equipo:** Ramiro, Carlos, Ana, Luis.
+
+Además de los problemas originales (llamadas, presupuestos extra, interfaz poco táctil), el equipo necesita saber **quién tiene cada auto**.
+
+---
+
 ## 🎯 Problema que resuelve
 
-En la operativa diaria de un taller mecánico aparecen tres fricciones principales que afectan la productividad y la relación con los clientes:
-
-1. **Interrupciones constantes por llamadas**  
-   Los clientes llaman o escriben reiteradamente para preguntar si su vehículo ya está listo, interrumpiendo el trabajo de los mecánicos.
-
-2. **Discusiones por presupuestos y trabajos extra**  
-   Al desarmar un vehículo suelen aparecer fallas adicionales. Cuando no existe un registro claro de la aprobación del cliente, se generan desacuerdos sobre los costos al momento del retiro.
-
-3. **Interfaces poco aptas para el taller**  
-   Las pantallas tradicionales con texto pequeño o botones estrechos son difíciles de usar con manos sucias, en movimiento o desde el celular del taller.
+1. **Interrupciones constantes por llamadas** — clientes preguntando si el auto está listo.
+2. **Discusiones por presupuestos y trabajos extra** — sin registro claro de aprobación.
+3. **Interfaces poco aptas para el taller** — botones chicos, difícil con manos sucias.
+4. **Falta de visibilidad del responsable** — en un equipo de 4, no alcanza con el semáforo: hay que ver **quién** trabaja cada unidad.
 
 ---
 
 ## 💡 Solución
 
-**Don Ramiro** resuelve estas problemáticas con una plataforma de **un solo toque (one-tap)** pensada específicamente para la dinámica del taller:
-
 | Función | Descripción |
 |--------|-------------|
-| **Semáforo de estados** | 🔴 En reparación · 🟡 Cotizando / Esperando aprobación · 🟢 Listo para retirar |
-| **Aprobación con marca de tiempo** | Al detectar un trabajo extra se registra detalle y monto. La app guarda fecha, hora y segundo exactos de la autorización del cliente → registro auditable. |
-| **WhatsApp directo (wa.me)** | Botones de un toque que abren WhatsApp con mensajes preescritos para pedir aprobación o avisar que el auto está listo. |
-| **Diseño táctil neobrutalista / arcade** | Botones grandes (mín. 48 px), tipografía bold y alto contraste para toques precisos desde el celular. |
-| **Historial y archivado** | Los vehículos entregados se archivan (no se eliminan) para consultar garantías sin saturar el panel diario. |
-| **Exportar / Importar** | Backup en archivo JSON para compartir entre dispositivos o guardar historial fuera de la app. |
+| **Semáforo de estados** | 🔴 En reparación · 🟡 Cotizando · 🟢 Listo · Historial. El filtro activo se pinta en color sólido para saber en qué vista estás. |
+| **Asignación de mecánico** | Al ingresar un auto se asigna obligatoriamente a Ramiro, Carlos, Ana o Luis. Se puede reasignar después. |
+| **Panel de equipo** | 4 recuadros con cantidad de autos **activos** por mecánico. Al tocar uno, se filtra por ese mecánico. |
+| **Aprobación con marca de tiempo** | Trabajos extra con detalle, costo y registro inalterable de aprobación. |
+| **WhatsApp directo** | Un clic abre el chat con mensaje prearmado. |
+| **Historial** | Archivar, reactivar o eliminar. El filtro por mecánico también aplica en historial. |
+| **Exportar / Importar** | Al exportar se elige: **backup completo** o **solo la vista actual** (filtros activos). Importar reemplaza los datos de la app. |
+
+### Cómo se usan los filtros (en la práctica)
+
+| Qué querés ver | Qué tocás |
+|----------------|----------|
+| Panorama general | **Activos** (+ “Ver todos” si había filtro de mecánico) |
+| Todo lo de un mecánico | **Activos** + recuadro de ese mecánico |
+| Solo cotizaciones de uno | **Cotizando** + ese mecánico |
+| Historial de uno | **Historial** + ese mecánico |
+
+Spec del feature: [`SPEC_ASIGNACION_MECANICO.md`](SPEC_ASIGNACION_MECANICO.md)  
+Checklist de prueba: [`TEST_CHECKLIST_ASIGNACION.md`](TEST_CHECKLIST_ASIGNACION.md)
 
 ---
 
 ## 📱 Cómo se ve la app
 
-### Pantalla principal
+### Flujo original (presupuestos y WhatsApp)
+
+### Pantalla principal (referencia previa)
 ![Pantalla principal - Don Ramiro](assets/don_ramiro.png)
 
 ### Ingresar un vehículo nuevo
@@ -76,48 +94,59 @@ En la operativa diaria de un taller mecánico aparecen tres fricciones principal
 ### Aviso por WhatsApp (mensaje predeterminado)
 ![WhatsApp listo para retirar](assets/whatsapp.png)
 
+### Mejora actual: equipo y filtros
+
+Con el feature de asignación, la pantalla suma:
+
+- **4 recuadros de mecánicos** (contadores de autos activos)
+- **Filtros de semáforo** con color sólido en la vista activa
+- **Badge + selector de mecánico** en cada tarjeta
+- Leyenda del tipo: `Filtrando por mecánico: Carlos · vista: En reparación`
+
+![Panel de mecánicos y filtro activo](assets/panel_mecanicos_filtro.png)
+
+*Captura: vista Reparando + filtro Carlos (ICP: tablet compartida, saber quién tiene cada auto).*
+
+Las capturas anteriores documentan el flujo de presupuestos y WhatsApp, que se mantiene.
+
 ---
+
+## 💾 Exportar e importar
+
+- **Exportar** pregunta qué guardar:
+  - **Aceptar** → solo la **vista actual** (filtros de estado y/o mecánico activos).
+  - **Cancelar** → **backup completo** de todos los vehículos, incluido el historial.
+- **Importar** carga un archivo JSON y **reemplaza** los datos actuales de la app (pide confirmación antes).
+- Si el archivo es antiguo y algún vehículo no tiene mecánico, al importar se le asigna **Ramiro** por defecto.
 
 ## 🔒 Privacidad y almacenamiento (versión beta)
 
-Esta es una **versión beta de uso interno** pensada como ejercicio de curso y herramienta de taller.
-
-- Los datos se guardan **únicamente en el navegador del dispositivo** (`localStorage`).
-- **No se envían a ningún servidor** ni a servicios en la nube.
-- No se requiere cuenta, login ni conexión a internet para funcionar (salvo WhatsApp).
-- Cada dispositivo mantiene su propia copia de los datos.
-- Para compartir información entre celulares o hacer respaldo se usa **Exportar / Importar** (archivo JSON).
-
-> Al ser de uso interno y no recolectar ni transmitir datos personales a terceros, no se implementó una política de privacidad formal en esta versión beta.  
-> Si en el futuro se agregara un backend o almacenamiento en la nube, correspondería incorporar avisos y políticas adecuadas.
+- Datos solo en el navegador (`localStorage`).
+- Sin servidores ni cuentas obligatorias.
+- Exportar / Importar para backup o cambio de dispositivo.
+- Uso interno / ejercicio de curso; si hubiera nube en el futuro, harían falta avisos formales.
 
 ---
 
 ## 🎨 Diseño
 
-- **Estilo**: Neobrutalism / Arcade (bordes negros gruesos, sombras duras, colores vivos)
-- **Enfoque**: Mobile-first y táctil
-- **Tipografía**: Inter (Google Fonts)
-- **Iconografía**: Font Awesome
-- **Feedback visual**: Botones con efecto “presión” al tocar + toasts de confirmación
-- **Colores semáforo**:
-  - 🔴 Rojo → En reparación
-  - 🟡 Amarillo → Cotizando / Esperando aprobación
-  - 🟢 Verde → Listo para retirar
+- Estilo arcade / neobrutalista (bordes negros, sombras duras)
+- Mobile-first y táctil (botones ≥ 48px)
+- Semáforo legible: vista activa en color sólido; el resto en blanco con número de color
+- Mecánico seleccionado resaltado en azul (para no confundirlo con el semáforo)
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🛠️ Tecnologías
 
 | Tecnología | Uso |
 |-----------|-----|
-| **HTML5** | Estructura semántica |
-| **CSS3 + Tailwind CSS** | Estilos y diseño responsive mobile-first |
-| **JavaScript ES6+** | Lógica de estado, DOM y marcas de tiempo |
-| **LocalStorage API** | Persistencia local sin servidor ni base de datos |
-| **Font Awesome** | Iconos |
-| **Google Fonts (Inter)** | Tipografía |
-| **wa.me** | Enlaces directos a WhatsApp |
+| HTML5 | Estructura |
+| CSS3 + Tailwind CSS | UI responsive |
+| JavaScript ES6+ | Estado, filtros, marcas de tiempo |
+| LocalStorage | Persistencia local |
+| Font Awesome / Inter | Iconos y tipografía |
+| wa.me | WhatsApp |
 
 ---
 
@@ -125,19 +154,23 @@ Esta es una **versión beta de uso interno** pensada como ejercicio de curso y h
 
 ```
 taller-mecanico-don-ramiro-/
-├── index.html              # Página principal
+├── index.html
 ├── css/
-│   └── styles.css          # Estilos arcade / neobrutalism
+│   └── styles.css
 ├── js/
-│   └── app.js              # Lógica de la aplicación
+│   └── app.js
 ├── assets/
-│   ├── don_ramiro.png      # Captura pantalla principal
-│   ├── ingresar.png        # Captura modal ingreso
+│   ├── don_ramiro.png
+│   ├── ingresar.png
 │   ├── trabajo_adicional.png
-│   └── whatsapp.png
-├── AGENT_CONTEXT.md        # Contexto para el agente (Spec Driven Development)
-├── SPEC_PRESUPUESTOS.md    # Especificación del feature principal
-├── BRAND_SKILL.md          # Guía de marca y diseño
+│   ├── whatsapp.png
+│   └── panel_mecanicos_filtro.png
+├── AGENT_CONTEXT.md
+├── SPEC_PRESUPUESTOS.md
+├── SPEC_ASIGNACION_MECANICO.md
+├── ICP_PERSONA.md
+├── TEST_CHECKLIST_ASIGNACION.md
+├── BRAND_SKILL.md
 ├── README.md
 └── .gitignore
 ```
@@ -146,53 +179,36 @@ taller-mecanico-don-ramiro-/
 
 ## 📱 Cómo probar la aplicación
 
-1. Entrá a la [demo online](https://noeliaorsini.github.io/taller-mecanico-don-ramiro-/) o abrí el archivo `index.html`.
-2. Presioná **INGRESAR VEHÍCULO** y completá el formulario.  
-   > 💡 Para probar WhatsApp con tu celular, ingresá tu número en formato internacional limpio (sin espacios ni ceros).  
-   > Ejemplo Argentina: `5491112345678`
-3. Cambiá el estado del auto con los botones del semáforo (🔴 🟡 🟢).
-4. Agregá un trabajo adicional con **+ EXTRA** → el auto pasa automáticamente a amarillo.
-5. Confirmá la aprobación del cliente (se genera la marca de tiempo) y luego pasalo a ROJO con el botón del semáforo.
-6. Presioná **WHATSAPP** para abrir la conversación con el mensaje preescrito.
-7. Al finalizar, usá **ARCHIVAR EN HISTORIAL**.
-8. Desde el **Historial** podés **REACTIVAR** o **ELIMINAR** definitivamente un vehículo.
-9. Usá **EXPORTAR** para descargar un backup JSON y **IMPORTAR** para cargarlo en otro dispositivo.
+1. Demo online (tras merge) o `index.html` local **con** carpetas `js/` y `css/`.
+2. **INGRESAR VEHÍCULO** — completar datos y **elegir mecánico** (obligatorio).
+3. Revisar el **panel de 4 mecánicos** y los contadores.
+4. Filtrar por estado (semáforo) y por mecánico; comprobar la leyenda de filtro.
+5. Cambiar mecánico desde la tarjeta.
+6. **+ EXTRA**, aprobación con marca de tiempo, **WHATSAPP**.
+7. **ARCHIVAR** / Historial / eliminar.
+8. **EXPORTAR**: elegir backup completo o solo la vista actual (filtros).
+9. **IMPORTAR**: reemplaza los datos actuales por el archivo JSON.
+
+Detalle: `TEST_CHECKLIST_ASIGNACION.md`.
 
 ---
 
-## 🚀 Cómo usarlo localmente
+## 🚀 Uso local
 
-### Opción 1 – Abrir directamente
-Descargá o cloná el repositorio y abrí `index.html` en el navegador.
-
-### Opción 2 – Servidor local
 ```bash
-# Python
 python -m http.server 8000
-
-# o con Node
-npx serve .
 ```
-Luego abrí: [http://localhost:8000](http://localhost:8000)
 
 ---
 
 ## 🔮 Posibles mejoras a futuro
 
-- Autenticación simple por PIN o usuario para varios empleados
-- Backend liviano (Supabase / SQLite) si se necesita sincronización entre dispositivos
-- **Backup automático a Google Drive** (u otro almacenamiento de la cuenta del usuario), para que los datos no se pierdan si se borran las cookies/caché del navegador o si se olvida exportar manualmente
-- Generación de comprobante/PDF de trabajos y aprobaciones
-- Filtro por fecha y búsqueda por patente o cliente
-- Modo offline más robusto (PWA + service worker)
-- Integración más avanzada con WhatsApp Business API
-- Roles (mecánico / administración) con permisos distintos
-
----
-
-## 📌 Nota
-
-Los datos se guardan únicamente en el navegador (`localStorage`). Si se limpia la caché se pierden, por eso se recomienda usar **EXPORTAR** periódicamente. Ideal para usar en una **tablet o celular del taller**.
+- PIN o usuario por mecánico
+- Backend liviano / sync entre dispositivos
+- Backup automático a Google Drive
+- PDF de trabajos y aprobaciones
+- Búsqueda por patente o cliente
+- PWA / offline más robusto
 
 ---
 
