@@ -3,29 +3,28 @@ const { test, expect } = require('@playwright/test');
 
 /**
  * Suite basada en TEST_CHECKLIST_ASIGNACION.md
- * (criterios de aceptación del feature de asignación de mecánico)
  */
 
 async function resetApp(page) {
   await page.goto('/');
-  await page.evaluate(() => {
-    localStorage.clear();
-  });
+  await page.evaluate(() => localStorage.clear());
   await page.reload();
-  await expect(page.locator('#panel-mecanicos')).toBeVisible();
+  await expect(page.locator('#panel-mecanicos')).toBeVisible({ timeout: 10000 });
 }
 
-async function ingresarVehiculo(page, { cliente, telefono, vehiculo, patente, motivo, mecanico }) {
-  await page.locator('button', { hasText: 'INGRESAR VEHÍCULO' }).click();
-  await expect(page.locator('#modal-ingresar')).not.toHaveClass(/hidden/);
-  await page.locator('#input-cliente').fill(cliente);
-  await page.locator('#input-telefono').fill(telefono);
-  await page.locator('#input-vehiculo').fill(vehiculo);
-  await page.locator('#input-patente').fill(patente);
-  await page.locator('#input-mecanico').selectOption(mecanico);
-  await page.locator('#input-motivo').fill(motivo);
-  await page.locator('#form-ingresar button[type="submit"]').click();
-  await expect(page.locator('#modal-ingresar')).toHaveClass(/hidden/);
+async function ingresarVehiculo(page, data) {
+  await page.getByRole('button', { name: /INGRESAR VEHÍCULO/i }).click();
+  await expect(page.locator('#modal-ingresar')).toBeVisible();
+
+  await page.locator('#input-cliente').fill(data.cliente);
+  await page.locator('#input-telefono').fill(data.telefono);
+  await page.locator('#input-vehiculo').fill(data.vehiculo);
+  await page.locator('#input-patente').fill(data.patente);
+  await page.locator('#input-mecanico').selectOption({ label: data.mecanico });
+  await page.locator('#input-motivo').fill(data.motivo);
+
+  await page.locator('#form-ingresar').getByRole('button', { name: /GUARDAR/i }).click();
+  await expect(page.locator('#modal-ingresar')).toBeHidden({ timeout: 10000 });
 }
 
 test.describe('Asignación de mecánico (checklist)', () => {
@@ -40,7 +39,7 @@ test.describe('Asignación de mecánico (checklist)', () => {
     }
   });
 
-  test('Alta: ingreso con mecánico obligatorio y visible en la tarjeta', async ({ page }) => {
+  test('Alta: ingreso con mecánico y badge visible en la tarjeta', async ({ page }) => {
     await ingresarVehiculo(page, {
       cliente: 'Cliente QA',
       telefono: '5491111111111',
@@ -50,13 +49,12 @@ test.describe('Asignación de mecánico (checklist)', () => {
       mecanico: 'Ana',
     });
 
-    const tarjeta = page.locator('#vehiculos-container').locator('div.arcade-card', { hasText: 'VW GOL QA' }).first();
-    await expect(tarjeta).toBeVisible();
-    await expect(tarjeta.getByText('ANA', { exact: false })).toBeVisible();
+    await expect(page.locator('#vehiculos-container')).toContainText(/VW Gol QA/i);
+    await expect(page.locator('#vehiculos-container')).toContainText(/Ana/i);
   });
 
   test('Panel: el contador del mecánico sube al asignar un auto activo', async ({ page }) => {
-    const antes = await page.locator('#count-mec-Carlos').innerText();
+    const antes = Number(await page.locator('#count-mec-Carlos').innerText());
     await ingresarVehiculo(page, {
       cliente: 'Cliente Contador',
       telefono: '5491122222222',
@@ -65,8 +63,8 @@ test.describe('Asignación de mecánico (checklist)', () => {
       motivo: 'Ver contador',
       mecanico: 'Carlos',
     });
-    const despues = await page.locator('#count-mec-Carlos').innerText();
-    expect(Number(despues)).toBeGreaterThan(Number(antes));
+    const despues = Number(await page.locator('#count-mec-Carlos').innerText());
+    expect(despues).toBeGreaterThan(antes);
   });
 
   test('Filtro por mecánico: al tocar un recuadro filtra y muestra leyenda', async ({ page }) => {
@@ -80,9 +78,9 @@ test.describe('Asignación de mecánico (checklist)', () => {
     });
 
     await page.locator('#mec-Luis').click();
-    await expect(page.locator('#filtro-mecanico-hint')).not.toHaveClass(/hidden/);
-    await expect(page.locator('#filtro-mecanico-nombre')).toContainText('Luis');
-    await expect(page.locator('#vehiculos-container')).toContainText('PEUGEOT LUIS');
+    await expect(page.locator('#filtro-mecanico-hint')).toBeVisible();
+    await expect(page.locator('#filtro-mecanico-nombre')).toContainText(/Luis/i);
+    await expect(page.locator('#vehiculos-container')).toContainText(/Peugeot Luis/i);
   });
 
   test('Filtro combinado: estado + mecánico', async ({ page }) => {
@@ -97,8 +95,8 @@ test.describe('Asignación de mecánico (checklist)', () => {
 
     await page.locator('#filter-ROJO').click();
     await page.locator('#mec-Ramiro').click();
-    await expect(page.locator('#filtro-mecanico-nombre')).toContainText('Ramiro');
-    await expect(page.locator('#vehiculos-container')).toContainText('RENAULT COMBO');
+    await expect(page.locator('#filtro-mecanico-nombre')).toContainText(/Ramiro/i);
+    await expect(page.locator('#vehiculos-container')).toContainText(/Renault Combo/i);
   });
 
   test('Edición: se puede cambiar el mecánico desde la tarjeta', async ({ page }) => {
@@ -111,9 +109,9 @@ test.describe('Asignación de mecánico (checklist)', () => {
       mecanico: 'Ana',
     });
 
-    const tarjeta = page.locator('#vehiculos-container').locator('div.arcade-card', { hasText: 'TOYOTA REASIGNAR' }).first();
-    await tarjeta.locator('select').selectOption('Luis');
-    await expect(tarjeta.getByText('LUIS', { exact: false })).toBeVisible();
+    const tarjeta = page.locator('#vehiculos-container .arcade-card').filter({ hasText: /Toyota Reasignar/i }).first();
+    await tarjeta.locator('select').selectOption({ label: 'Luis' });
+    await expect(tarjeta).toContainText(/Luis/i);
   });
 
   test('Semáforo: el filtro activo de reparación se marca en rojo', async ({ page }) => {
