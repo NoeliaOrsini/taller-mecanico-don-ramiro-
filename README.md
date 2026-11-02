@@ -147,6 +147,8 @@ Las capturas anteriores documentan el flujo de presupuestos y WhatsApp, que se m
 | LocalStorage | Persistencia local |
 | Font Awesome / Inter | Iconos y tipografía |
 | wa.me | WhatsApp |
+| Playwright | Pruebas end-to-end automatizadas |
+| GitHub Actions | CI: ejecución de la suite en cada push/PR |
 
 ---
 
@@ -165,6 +167,14 @@ taller-mecanico-don-ramiro-/
 │   ├── trabajo_adicional.png
 │   ├── whatsapp.png
 │   └── panel_mecanicos_filtro.png
+├── tests/
+│   ├── asignacion.spec.js      # Checklist de asignación (Playwright)
+│   └── presupuestos.spec.js    # Humo: extra + aprobación
+├── playwright.config.js
+├── package.json
+├── .github/
+│   └── workflows/
+│       └── ci.yml              # GitHub Actions (CI)
 ├── AGENT_CONTEXT.md
 ├── SPEC_PRESUPUESTOS.md
 ├── SPEC_ASIGNACION_MECANICO.md
@@ -193,6 +203,37 @@ Detalle: `TEST_CHECKLIST_ASIGNACION.md`.
 
 ---
 
+## 🧪 Pruebas (manuales + automatización)
+
+El trabajo de calidad se planteó en dos capas, como en un flujo real de QA:
+
+1. **Prueba manual / exploratoria** — checklist con fecha y resultado (`TEST_CHECKLIST_ASIGNACION.md`). Sirvió para validar el feature con criterio humano (filtros, historial, export/import, uso en celular).
+2. **Pruebas automatizadas (regresión)** — suite **Playwright** que reejecuta los criterios principales sin depender de repetir todo a mano. Integrada a **GitHub Actions (CI)**: en cada push a la rama de tests o en un Pull Request la suite corre sola y deja evidencia (check verde/rojo + informe HTML).
+
+**Alcance de la automatización**
+
+| Área | Qué se valida |
+|------|----------------|
+| Asignación | 4 mecánicos, alta con mecánico, contadores, reasignación, filtros |
+| Semáforo | Estado activo visible (ej. reparación en rojo) |
+| Presupuestos (humo) | Trabajo extra, aprobación con marca de tiempo |
+| WhatsApp | Presencia del botón (el envío real se prueba en el dispositivo) |
+
+**Comandos locales**
+
+```bash
+npm install
+npx playwright install chromium
+npm test
+npx playwright show-report
+```
+
+**En el repositorio:** pestaña **Actions** → workflow **Pruebas Playwright** → artefacto `playwright-report` (informe HTML descargable). No hace falta adjuntar el informe al README: se genera en cada corrida.
+
+> Nota QA: la automatización no reemplaza la prueba manual en dispositivos reales; la complementa para detectar regresiones rápido después de cada cambio.
+
+---
+
 ## 🚀 Uso local
 
 ```bash
@@ -209,6 +250,7 @@ python -m http.server 8000
 - PDF de trabajos y aprobaciones
 - Búsqueda por patente o cliente
 - PWA / offline más robusto
+- Ampliar cobertura E2E (export/import, alta sin mecánico)
 
 ---
 
